@@ -233,6 +233,10 @@ export const macbookCatalog: MacbookModel[] = [
   },
 ];
 
+export function getMacbookModelById(modelId: string) {
+  return macbookCatalog.find((model) => model.id === modelId) ?? null;
+}
+
 export function getRecommendation(answers: FinderAnswers) {
   const scored = macbookCatalog
     .map((model) => {
