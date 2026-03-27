@@ -1,27 +1,93 @@
 "use client";
 
-import { useTransition, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import {
   finderQuestions,
   getRecommendation,
   type FinderAnswers,
 } from "@/lib/macbook-finder";
+import type { RecommendationProduct } from "@/lib/recommendation-products";
 
 const totalQuestions = finderQuestions.length;
+
+type ProductState = {
+  status: "idle" | "loading" | "ready" | "error";
+  items: RecommendationProduct[];
+};
 
 export function MacbookFinder() {
   const [answers, setAnswers] = useState<FinderAnswers>({});
   const [currentStep, setCurrentStep] = useState(0);
   const [isPending, startTransition] = useTransition();
+  const [productState, setProductState] = useState<ProductState>({
+    status: "idle",
+    items: [],
+  });
 
   const answeredCount = finderQuestions.filter((question) => answers[question.id]).length;
   const isComplete = answeredCount === totalQuestions;
   const activeQuestion = finderQuestions[currentStep];
   const recommendation = isComplete ? getRecommendation(answers) : null;
 
+  useEffect(() => {
+    if (!recommendation) {
+      setProductState({
+        status: "idle",
+        items: [],
+      });
+      return;
+    }
+
+    const controller = new AbortController();
+    const profileKey = recommendation.primary.id;
+
+    async function loadProducts() {
+      try {
+        setProductState({
+          status: "loading",
+          items: [],
+        });
+
+        const response = await fetch(`/api/recommendations/${profileKey}`, {
+          signal: controller.signal,
+          cache: "no-store",
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to load products for ${profileKey}`);
+        }
+
+        const payload = (await response.json()) as {
+          products?: RecommendationProduct[];
+        };
+
+        setProductState({
+          status: "ready",
+          items: payload.products ?? [],
+        });
+      } catch (error) {
+        if (controller.signal.aborted) {
+          return;
+        }
+
+        console.error(error);
+
+        setProductState({
+          status: "error",
+          items: [],
+        });
+      }
+    }
+
+    void loadProducts();
+
+    return () => controller.abort();
+  }, [recommendation]);
+
   const handleChoice = (questionId: string, value: string, stepIndex: number) => {
     startTransition(() => {
       setAnswers((prev) => ({ ...prev, [questionId]: value }));
+
       if (stepIndex < totalQuestions - 1) {
         setCurrentStep(stepIndex + 1);
       }
@@ -32,7 +98,23 @@ export function MacbookFinder() {
     startTransition(() => {
       setAnswers({});
       setCurrentStep(0);
+      setProductState({
+        status: "idle",
+        items: [],
+      });
     });
+  };
+
+  const formatPrice = (price: number | null, currency: string) => {
+    if (price === null) {
+      return "가격 확인 중";
+    }
+
+    return new Intl.NumberFormat("ko-KR", {
+      style: "currency",
+      currency,
+      maximumFractionDigits: 0,
+    }).format(price);
   };
 
   return (
@@ -47,7 +129,7 @@ export function MacbookFinder() {
               Finder
             </p>
             <h2 className="mt-3 font-display text-4xl tracking-[-0.06em] text-[var(--ink)]">
-              당신에게 맞는 맥북
+              나에게 맞는 맥북 찾기
             </h2>
             <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
               4개의 질문으로 Air와 Pro 사이를 빠르게 좁혀드립니다.
@@ -144,6 +226,7 @@ export function MacbookFinder() {
               <p className="mt-3 text-lg text-[var(--ink)]">
                 {recommendation.primary.tagline}
               </p>
+
               <div className="mt-6 flex flex-wrap gap-2">
                 <span className="rounded-full border border-black/8 bg-white/75 px-3 py-2 text-sm text-[var(--muted)]">
                   {recommendation.primary.chip}
@@ -180,7 +263,7 @@ export function MacbookFinder() {
 
               <div className="mt-6 flex flex-wrap gap-3">
                 <a
-                  href={recommendation.primary.affiliatePlaceholder}
+                  href="#finder-products"
                   className="inline-flex items-center justify-center rounded-full bg-[var(--ink)] px-5 py-3 text-sm text-white shadow-[0_20px_40px_rgba(24,26,31,0.18)]"
                 >
                   추천 상품 보기
@@ -195,6 +278,108 @@ export function MacbookFinder() {
               </div>
             </div>
 
+            <div
+              id="finder-products"
+              className="rounded-[24px] border border-black/8 bg-white/60 p-5"
+            >
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
+                    Ready To Buy
+                  </p>
+                  <p className="mt-2 text-lg font-medium tracking-[-0.04em] text-[var(--ink)]">
+                    추천 결과에 맞는 실구매 상품
+                  </p>
+                </div>
+                <span className="rounded-full border border-black/8 bg-white/70 px-3 py-2 text-xs text-[var(--muted)]">
+                  {productState.items.length} item
+                  {productState.items.length === 1 ? "" : "s"}
+                </span>
+              </div>
+
+              {productState.status === "loading" ? (
+                <div className="mt-5 grid gap-3">
+                  {[0, 1].map((item) => (
+                    <div
+                      key={item}
+                      className="animate-pulse rounded-[20px] border border-black/6 bg-[rgba(250,248,244,0.9)] p-4"
+                    >
+                      <div className="h-4 w-24 rounded-full bg-black/8" />
+                      <div className="mt-4 h-6 w-2/3 rounded-full bg-black/8" />
+                      <div className="mt-3 h-4 w-full rounded-full bg-black/6" />
+                    </div>
+                  ))}
+                </div>
+              ) : null}
+
+              {productState.status === "ready" && productState.items.length > 0 ? (
+                <div className="mt-5 grid gap-3">
+                  {productState.items.map((item) => (
+                    <article
+                      key={item.linkId}
+                      className="rounded-[22px] border border-black/8 bg-[rgba(250,248,244,0.88)] p-4"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
+                            Option {item.slot}
+                          </p>
+                          <h4 className="mt-2 text-lg font-medium leading-7 tracking-[-0.04em] text-[var(--ink)]">
+                            {item.title}
+                          </h4>
+                        </div>
+                        <p className="text-sm text-[var(--muted)]">
+                          {formatPrice(item.price, item.currency)}
+                        </p>
+                      </div>
+
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {item.brand ? (
+                          <span className="rounded-full border border-black/8 bg-white/70 px-3 py-2 text-xs text-[var(--muted)]">
+                            {item.brand}
+                          </span>
+                        ) : null}
+                        {item.availability ? (
+                          <span className="rounded-full border border-black/8 bg-white/70 px-3 py-2 text-xs text-[var(--muted)]">
+                            {item.availability}
+                          </span>
+                        ) : null}
+                      </div>
+
+                      {item.rationale ? (
+                        <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
+                          {item.rationale}
+                        </p>
+                      ) : null}
+
+                      <div className="mt-4">
+                        <a
+                          href={`/out/${item.linkId}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center justify-center rounded-full bg-[var(--ink)] px-4 py-3 text-sm text-white shadow-[0_20px_40px_rgba(24,26,31,0.16)]"
+                        >
+                          상품 보러 가기
+                        </a>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              ) : null}
+
+              {productState.status === "ready" && productState.items.length === 0 ? (
+                <div className="mt-5 rounded-[20px] border border-dashed border-black/10 bg-[rgba(250,248,244,0.9)] px-4 py-5 text-sm leading-7 text-[var(--muted)]">
+                  추천 결과는 준비됐습니다. 실구매 상품 매핑은 곧 연결됩니다.
+                </div>
+              ) : null}
+
+              {productState.status === "error" ? (
+                <div className="mt-5 rounded-[20px] border border-dashed border-black/10 bg-[rgba(250,248,244,0.9)] px-4 py-5 text-sm leading-7 text-[var(--muted)]">
+                  상품 정보를 불러오는 중 문제가 생겼습니다. 잠시 후 다시 확인해주세요.
+                </div>
+              ) : null}
+            </div>
+
             <div className="grid gap-3 md:grid-cols-[1fr_1fr]">
               <div className="rounded-[24px] border border-black/8 bg-white/60 p-5">
                 <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
@@ -207,6 +392,7 @@ export function MacbookFinder() {
                   {recommendation.alternative.tagline}
                 </p>
               </div>
+
               <div className="rounded-[24px] border border-black/8 bg-white/60 p-5">
                 <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
                   Snapshot
