@@ -35,22 +35,23 @@ type RecommendationProfileRow = {
   summary: string | null;
 };
 
-type RecommendationProductLinkRow = {
-  id: string;
-  slot: number;
+type RecommendationBundleRow = {
+  profile_id: string;
+  profile_key: string;
+  profile_title: string;
+  profile_summary: string | null;
+  link_id: string | null;
+  slot: number | null;
   rationale: string | null;
-  recommendation_profile_id: string;
-  coupang_products: {
-    id: string;
-    title: string;
-    deeplink: string;
-    image_url: string | null;
-    brand: string | null;
-    price: number | null;
-    currency: string;
-    availability: string | null;
-    synced_at: string;
-  } | null;
+  product_id: string | null;
+  product_title: string | null;
+  deeplink: string | null;
+  image_url: string | null;
+  brand: string | null;
+  price: number | null;
+  currency: string | null;
+  availability: string | null;
+  synced_at: string | null;
 };
 
 export async function getRecommendationProductBundle(
@@ -80,50 +81,30 @@ export async function getRecommendationProductBundle(
   }
 
   const { data: links, error: linksError } = await supabase
-    .from("recommendation_product_links")
-    .select(
-      `
-        id,
-        slot,
-        rationale,
-        recommendation_profile_id,
-        coupang_products (
-          id,
-          title,
-          deeplink,
-          image_url,
-          brand,
-          price,
-          currency,
-          availability,
-          synced_at
-        )
-      `,
-    )
-    .eq("recommendation_profile_id", profile.id)
-    .eq("is_active", true)
-    .order("slot", { ascending: true })
-    .returns<RecommendationProductLinkRow[]>();
+    .rpc("get_recommendation_product_bundle", {
+      profile_key: profileKey,
+    })
+    .returns<RecommendationBundleRow[]>();
 
   if (linksError) {
     throw linksError;
   }
 
   const products = (links ?? [])
-    .filter((link) => link.coupang_products)
+    .filter((link) => link.link_id && link.product_id && link.product_title && link.deeplink)
     .map((link) => ({
-      linkId: link.id,
-      slot: link.slot,
+      linkId: link.link_id!,
+      slot: link.slot ?? 0,
       rationale: link.rationale,
-      productId: link.coupang_products!.id,
-      title: link.coupang_products!.title,
-      deeplink: link.coupang_products!.deeplink,
-      imageUrl: link.coupang_products!.image_url,
-      brand: link.coupang_products!.brand,
-      price: link.coupang_products!.price,
-      currency: link.coupang_products!.currency,
-      availability: link.coupang_products!.availability,
-      syncedAt: link.coupang_products!.synced_at,
+      productId: link.product_id!,
+      title: link.product_title!,
+      deeplink: link.deeplink!,
+      imageUrl: link.image_url,
+      brand: link.brand,
+      price: link.price,
+      currency: link.currency ?? "KRW",
+      availability: link.availability,
+      syncedAt: link.synced_at ?? new Date(0).toISOString(),
     }));
 
   return {

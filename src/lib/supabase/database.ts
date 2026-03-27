@@ -314,7 +314,31 @@ export type Database = {
       };
     };
     Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Functions: {
+      get_recommendation_product_bundle: {
+        Args: {
+          profile_key: string;
+        };
+        Returns: {
+          profile_id: string;
+          profile_key: string;
+          profile_title: string;
+          profile_summary: string | null;
+          link_id: string | null;
+          slot: number | null;
+          rationale: string | null;
+          product_id: string | null;
+          product_title: string | null;
+          deeplink: string | null;
+          image_url: string | null;
+          brand: string | null;
+          price: number | null;
+          currency: string | null;
+          availability: string | null;
+          synced_at: string | null;
+        }[];
+      };
+    };
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;
   };
