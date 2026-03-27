@@ -49,6 +49,9 @@ export function MacbookFinder() {
             <h2 className="mt-3 font-display text-4xl tracking-[-0.06em] text-[var(--ink)]">
               당신에게 맞는 맥북
             </h2>
+            <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
+              4개의 질문으로 Air와 Pro 사이를 빠르게 좁혀드립니다.
+            </p>
           </div>
           <div className="rounded-full border border-black/8 bg-white/55 px-4 py-2 text-sm text-[var(--muted)]">
             {answeredCount}/{totalQuestions}
@@ -180,7 +183,7 @@ export function MacbookFinder() {
                   href={recommendation.primary.affiliatePlaceholder}
                   className="inline-flex items-center justify-center rounded-full bg-[var(--ink)] px-5 py-3 text-sm text-white shadow-[0_20px_40px_rgba(24,26,31,0.18)]"
                 >
-                  쿠팡 파트너스 링크 슬롯
+                  추천 상품 보기
                 </a>
                 <button
                   type="button"
