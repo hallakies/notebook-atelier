@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Cormorant_Garamond, Noto_Sans_KR } from "next/font/google";
 import "./globals.css";
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://notebook-at.vercel.app";
+
 const displayFont = Cormorant_Garamond({
   subsets: ["latin"],
   variable: "--font-display",
@@ -15,6 +17,7 @@ const bodyFont = Noto_Sans_KR({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
     default: "노트북 아틀리에 | 취향에 맞는 프리미엄 노트북 추천",
     template: "%s | 노트북 아틀리에",
@@ -37,6 +40,7 @@ export const metadata: Metadata = {
     siteName: "노트북 아틀리에",
     locale: "ko_KR",
     type: "website",
+    url: siteUrl,
   },
   twitter: {
     card: "summary_large_image",

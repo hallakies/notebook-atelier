@@ -32,88 +32,88 @@ export const finderQuestions: FinderQuestion[] = [
   {
     id: "mobility",
     label: "휴대성",
-    prompt: "어떤 리듬으로 들고 다니나요?",
+    prompt: "얼마나 자주 들고 다니나요?",
     choices: [
       {
         value: "light",
         title: "매일 가볍게",
-        description: "카페, 강의실, 회의실처럼 이동이 잦고 무게가 가장 중요합니다.",
+        description: "학교, 카페, 회의실처럼 이동이 많고 무게와 배터리가 가장 중요합니다.",
       },
       {
         value: "balanced",
-        title: "가끔 이동하며 균형",
-        description: "휴대성과 성능이 모두 필요하고 한쪽으로 치우치고 싶지 않습니다.",
+        title: "균형 있게",
+        description: "휴대성도 필요하지만 화면과 성능도 동시에 놓치고 싶지 않습니다.",
       },
       {
         value: "power",
-        title: "자리 잡고 성능 우선",
-        description: "이동보다 작업 밀도와 확장성을 더 중요하게 봅니다.",
+        title: "성능 우선",
+        description: "이동보다 작업 강도와 지속 성능이 더 중요합니다.",
       },
     ],
   },
   {
     id: "workload",
     label: "작업 강도",
-    prompt: "가장 자주 하는 작업은 무엇인가요?",
+    prompt: "주로 어떤 작업을 하나요?",
     choices: [
       {
         value: "casual",
-        title: "문서와 브라우징",
-        description: "리서치, 문서 작성, 가벼운 편집, 온라인 수업이 중심입니다.",
+        title: "문서와 웹 작업",
+        description: "문서 작성, 브라우징, 수업, 회의, 가벼운 멀티태스킹이 중심입니다.",
       },
       {
         value: "builder",
         title: "개발과 멀티태스킹",
-        description: "코드 편집, 다수의 앱 실행, 외부 디스플레이 활용이 중요합니다.",
+        description: "코드 편집, 여러 앱 동시 실행, 외부 모니터 사용이 중요합니다.",
       },
       {
         value: "studio",
         title: "영상과 크리에이티브",
-        description: "영상 편집, 모션 그래픽, 대용량 파일 처리까지 염두에 둡니다.",
+        description: "영상 편집, 모션 그래픽, 큰 파일 처리처럼 성능 여유가 필요합니다.",
       },
     ],
   },
   {
     id: "display",
     label: "화면",
-    prompt: "어떤 화면 크기가 더 편한가요?",
+    prompt: "원하는 화면 크기는 어느 쪽인가요?",
     choices: [
       {
         value: "compact",
         title: "작고 빠른 쪽",
-        description: "가방에 넣기 쉽고 어디서나 펼치기 쉬운 크기가 좋습니다.",
+        description: "가방에 넣고 꺼내기 쉽고, 어디서나 펼치기 편한 크기가 좋습니다.",
       },
       {
         value: "roomy",
-        title: "넓지만 부담 없는 쪽",
-        description: "화면 여유는 챙기되 너무 무거워지는 것은 원하지 않습니다.",
+        title: "넓지만 과하지 않게",
+        description: "화면 여유는 필요하지만 지나치게 무거운 모델은 피하고 싶습니다.",
       },
       {
         value: "max",
         title: "최대한 크게",
-        description: "여러 타임라인과 툴 패널을 넉넉하게 띄워두고 작업하고 싶습니다.",
+        description: "여러 창을 띄우고 긴 시간 작업하는 데 큰 화면이 중요합니다.",
       },
     ],
   },
   {
     id: "budget",
     label: "예산",
-    prompt: "예산은 어느 정도로 생각하나요?",
+    prompt: "예산은 어느 정도까지 생각하나요?",
     choices: [
       {
         value: "value",
-        title: "가장 합리적으로",
-        description: "필요한 것 이상으로 쓰지 않고 오래 만족할 기본형을 원합니다.",
+        title: "합리적으로",
+        description: "필요한 만큼만 쓰고, 오래 만족할 기본형을 원합니다.",
       },
       {
         value: "premium",
-        title: "조금 더 써도 좋음",
-        description: "확실히 체감되는 상위 경험이라면 투자할 수 있습니다.",
+        title: "조금 더 투자 가능",
+        description: "체감 성능이나 디스플레이에서 확실한 차이가 있다면 투자할 수 있습니다.",
       },
       {
         value: "flagship",
-        title: "최상위까지 가능",
-        description: "성능과 작업 효율이 확실하다면 가장 높은 급도 고려합니다.",
+        title: "최상위도 가능",
+        description: "장기 사용과 최고 성능을 위해 상위 모델도 고려합니다.",
       },
     ],
   },
@@ -121,24 +121,24 @@ export const finderQuestions: FinderQuestion[] = [
 
 const answerReasoning: Record<string, Record<string, string>> = {
   mobility: {
-    light: "이동이 잦다면 가벼운 무게와 긴 배터리가 가장 먼저 체감됩니다.",
-    balanced: "휴대성과 성능을 동시에 챙겨야 할 때는 중간 지점의 균형이 중요합니다.",
-    power: "자리를 잡고 작업한다면 두께와 무게보다 성능 헤드룸이 더 중요합니다.",
+    light: "이동이 많다면 가벼운 무게와 긴 배터리가 가장 먼저 체감됩니다.",
+    balanced: "휴대성과 성능을 동시에 챙기려는 중간 지점의 균형이 중요합니다.",
+    power: "책상에 두고 오래 작업한다면 무게보다 성능 여유가 더 중요해집니다.",
   },
   workload: {
-    casual: "문서와 브라우징 중심이라면 조용하고 오래가는 모델이 효율적입니다.",
+    casual: "문서와 웹 작업 중심이라면 조용하고 오래 가는 모델이 효율적입니다.",
     builder: "개발과 멀티태스킹에는 메모리 여유와 지속 성능이 추천의 핵심입니다.",
-    studio: "영상과 크리에이티브 작업은 GPU 여유와 큰 화면이 직접적인 생산성으로 이어집니다.",
+    studio: "영상과 크리에이티브 작업은 GPU 여유와 큰 화면이 바로 생산성으로 이어집니다.",
   },
   display: {
     compact: "작은 화면 선호는 가방에 넣고 펼치는 리듬과 직결됩니다.",
-    roomy: "넓은 화면을 원하지만 이동도 고려한다면 15인치 안팎이 가장 현실적입니다.",
-    max: "큰 화면 선호는 Pro 계열의 가치가 커지는 가장 분명한 신호입니다.",
+    roomy: "넓은 화면이 필요하지만 무게도 고려한다면 15인치나 14인치 Pro가 적절합니다.",
+    max: "큰 화면 선호가 분명하다면 상위 Pro 계열의 가치가 커집니다.",
   },
   budget: {
-    value: "예산을 아끼고 싶다면 오래 만족하는 기본형으로 좁히는 편이 좋습니다.",
-    premium: "조금 더 투자해도 된다면 성능이나 화면에서 체감이 있는 구간을 노릴 수 있습니다.",
-    flagship: "예산 여유가 충분하면 장기 사용 기준으로 상위 Pro까지 바로 올라갈 수 있습니다.",
+    value: "예산을 아끼고 싶다면 기본형에서 가장 만족도가 높은 조합을 고르는 편이 좋습니다.",
+    premium: "조금 더 투자할 수 있다면 화면과 성능에서 체감 차이가 분명한 구간이 있습니다.",
+    flagship: "예산 여유가 충분하다면 장기 사용 기준으로 상위 Pro가 더 단단한 선택이 됩니다.",
   },
 };
 
@@ -149,8 +149,12 @@ export const macbookCatalog: MacbookModel[] = [
     chip: "M5",
     size: "13-inch",
     priceBand: "가장 합리적인 시작점",
-    tagline: "가볍고 오래가며, 기본 작업에는 가장 설득력 있는 선택",
-    highlights: ["매일 들고 다니기 쉬운 무게", "문서·웹·수업 중심에 최적", "배터리 효율과 정숙성"],
+    tagline: "가볍고 오래 가며, 일상적인 작업은 충분히 소화하는 가장 보편적인 선택",
+    highlights: [
+      "매일 들고 다니기 편한 무게",
+      "문서, 웹, 수업, 회의용으로 안정적",
+      "배터리 효율이 우수한 기본형",
+    ],
     affiliatePlaceholder: "#finder",
     weights: {
       mobility: { light: 5, balanced: 2, power: 0 },
@@ -165,11 +169,11 @@ export const macbookCatalog: MacbookModel[] = [
     chip: "M5",
     size: "15-inch",
     priceBand: "넓은 화면의 Air",
-    tagline: "Air의 가벼운 성격을 유지하면서 화면 여유를 챙기는 선택",
+    tagline: "Air의 가벼움은 유지하면서도 화면 여유를 원하는 사람에게 맞는 선택",
     highlights: [
-      "넓은 화면과 부드러운 이동성",
-      "문서·기획·가벼운 편집에 유리",
-      "카페와 사무실을 오가는 사용자에게 적합",
+      "넓은 화면과 부드러운 휴대성의 균형",
+      "문서 작업과 가벼운 편집에 여유로운 공간",
+      "집과 카페를 오가는 사용자에게 적합",
     ],
     affiliatePlaceholder: "#finder",
     weights: {
@@ -186,7 +190,11 @@ export const macbookCatalog: MacbookModel[] = [
     size: "14-inch",
     priceBand: "균형 잡힌 Pro",
     tagline: "휴대성과 Pro 계열의 안정감을 동시에 원하는 사용자에게 맞는 선택",
-    highlights: ["개발과 멀티태스킹에 안정적", "보다 선명한 디스플레이 경험", "Air보다 긴 작업 지속성"],
+    highlights: [
+      "개발과 멀티태스킹에 안정적",
+      "보다 선명한 디스플레이 경험",
+      "Air보다 긴 작업 지속성",
+    ],
     affiliatePlaceholder: "#finder",
     weights: {
       mobility: { light: 2, balanced: 5, power: 3 },
@@ -201,11 +209,11 @@ export const macbookCatalog: MacbookModel[] = [
     chip: "M5 Pro",
     size: "14-inch",
     priceBand: "본격 작업용 Pro",
-    tagline: "개발과 제작 업무가 모두 무겁다면 가장 설득력 있는 실전형",
+    tagline: "개발과 고강도 업무가 모두 무겁다면 가장 만족도가 높은 실전형",
     highlights: [
       "여러 앱을 동시에 돌려도 여유로운 성능",
-      "코드·디자인·편집을 함께 처리하기 좋음",
-      "작지만 강한 고성능 포맷",
+      "코드와 디자인, 영상 편집을 함께 처리하기 좋음",
+      "작지만 강한 고성능 조합",
     ],
     affiliatePlaceholder: "#finder",
     weights: {
@@ -221,8 +229,12 @@ export const macbookCatalog: MacbookModel[] = [
     chip: "M5 Max",
     size: "16-inch",
     priceBand: "최상위 작업용",
-    tagline: "영상과 크리에이티브 작업이 본업이라면 가장 직접적인 선택",
-    highlights: ["넓은 화면과 높은 GPU 여유", "영상·모션·대용량 작업에 적합", "장시간 집중 작업을 위한 플래그십"],
+    tagline: "영상과 크리에이티브 작업이 본업이라면 가장 직접적인 해답이 되는 선택",
+    highlights: [
+      "넓은 화면과 높은 GPU 여유",
+      "영상, 모션, 대용량 작업에 적합",
+      "장시간 집중 작업을 위한 플래그십 구성",
+    ],
     affiliatePlaceholder: "#finder",
     weights: {
       mobility: { light: 0, balanced: 1, power: 5 },

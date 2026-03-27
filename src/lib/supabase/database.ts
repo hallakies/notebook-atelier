@@ -228,6 +228,36 @@ export type Database = {
         };
         Relationships: [];
       };
+      recommendation_events: {
+        Row: {
+          created_at: string;
+          event_type: "started" | "completed" | "refreshed_products";
+          id: string;
+          metadata: Json;
+          recommendation_profile_id: string | null;
+          session_id: string | null;
+          source_page: string;
+        };
+        Insert: {
+          created_at?: string;
+          event_type: "started" | "completed" | "refreshed_products";
+          id?: string;
+          metadata?: Json;
+          recommendation_profile_id?: string | null;
+          session_id?: string | null;
+          source_page?: string;
+        };
+        Update: {
+          created_at?: string;
+          event_type?: "started" | "completed" | "refreshed_products";
+          id?: string;
+          metadata?: Json;
+          recommendation_profile_id?: string | null;
+          session_id?: string | null;
+          source_page?: string;
+        };
+        Relationships: [];
+      };
       recommendation_profiles: {
         Row: {
           created_at: string;

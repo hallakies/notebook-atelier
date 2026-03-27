@@ -1,109 +1,161 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useCallback, useEffect, useState, useTransition } from "react";
 import {
   finderQuestions,
   getRecommendation,
   type FinderAnswers,
 } from "@/lib/macbook-finder";
-import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
-import type { RecommendationProduct } from "@/lib/recommendation-products";
+import type {
+  RecommendationProduct,
+  RecommendationProductBundle,
+} from "@/lib/recommendation-products";
 
 const totalQuestions = finderQuestions.length;
 
 type ProductState = {
   status: "idle" | "loading" | "ready" | "error";
   items: RecommendationProduct[];
-};
-
-type RecommendationBundleRow = {
-  link_id: string | null;
-  slot: number | null;
-  rationale: string | null;
-  product_id: string | null;
-  product_title: string | null;
-  deeplink: string | null;
-  image_url: string | null;
-  brand: string | null;
-  price: number | null;
-  currency: string | null;
-  availability: string | null;
-  synced_at: string | null;
+  message: string | null;
 };
 
 export function MacbookFinder() {
   const [answers, setAnswers] = useState<FinderAnswers>({});
   const [currentStep, setCurrentStep] = useState(0);
   const [isPending, startTransition] = useTransition();
+  const [reloadToken, setReloadToken] = useState(0);
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [hasLoggedStart, setHasLoggedStart] = useState(false);
+  const [lastCompletedProfileKey, setLastCompletedProfileKey] = useState<string | null>(null);
   const [productState, setProductState] = useState<ProductState>({
     status: "idle",
     items: [],
+    message: null,
   });
 
   const answeredCount = finderQuestions.filter((question) => answers[question.id]).length;
   const isComplete = answeredCount === totalQuestions;
   const activeQuestion = finderQuestions[currentStep];
   const recommendation = isComplete ? getRecommendation(answers) : null;
+  const recommendationProfileKey = recommendation?.primary.id ?? null;
 
   useEffect(() => {
-    if (!recommendation) {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const writeSessionCookie = (value: string) => {
+      document.cookie = `na_session=${value}; Path=/; Max-Age=${60 * 60 * 24 * 30}; SameSite=Lax`;
+    };
+
+    const existingSessionId = window.localStorage.getItem("na_session_id");
+    if (existingSessionId) {
+      writeSessionCookie(existingSessionId);
+      setSessionId(existingSessionId);
+      return;
+    }
+
+    const nextSessionId =
+      typeof crypto !== "undefined" && "randomUUID" in crypto
+        ? crypto.randomUUID()
+        : `na-${Date.now()}`;
+
+    window.localStorage.setItem("na_session_id", nextSessionId);
+    writeSessionCookie(nextSessionId);
+    setSessionId(nextSessionId);
+  }, []);
+
+  const logFinderEvent = useCallback(
+    async (
+      eventType: "started" | "completed" | "refreshed_products",
+      metadata: Record<string, unknown> = {},
+    ) => {
+      try {
+        await fetch("/api/finder-events", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            sessionId,
+            eventType,
+            recommendationProfileKey,
+            sourcePage: "/#finder",
+            metadata,
+          }),
+        });
+      } catch (error) {
+        console.error("Failed to log finder event", error);
+      }
+    },
+    [recommendationProfileKey, sessionId],
+  );
+
+  useEffect(() => {
+    if (!sessionId || !recommendationProfileKey) {
+      return;
+    }
+
+    if (lastCompletedProfileKey === recommendationProfileKey) {
+      return;
+    }
+
+    void logFinderEvent("completed", {
+      answers,
+      recommendationProfileKey,
+    });
+    setLastCompletedProfileKey(recommendationProfileKey);
+  }, [
+    answers,
+    lastCompletedProfileKey,
+    logFinderEvent,
+    recommendationProfileKey,
+    sessionId,
+  ]);
+
+  useEffect(() => {
+    if (!recommendationProfileKey) {
       setProductState({
         status: "idle",
         items: [],
+        message: null,
       });
       return;
     }
 
     const controller = new AbortController();
-    const profileKey = recommendation.primary.id;
+    const profileKey = recommendationProfileKey;
 
     async function loadProducts() {
       try {
         setProductState({
           status: "loading",
           items: [],
+          message: "추천 결과에 맞는 실구매 상품을 확인하고 있습니다.",
         });
 
-        const supabase = createBrowserSupabaseClient();
+        const response = await fetch(
+          `/api/recommendations/${encodeURIComponent(profileKey)}`,
+          {
+            cache: "no-store",
+            signal: controller.signal,
+          },
+        );
 
-        const { data, error } = await supabase
-          .rpc("get_recommendation_product_bundle", {
-            profile_key: profileKey,
-          })
-          .returns<RecommendationBundleRow[]>();
-
-        if (error) {
-          throw error;
+        if (!response.ok) {
+          throw new Error(`Failed to load recommendation products (${response.status})`);
         }
 
-        const items = (data ?? [])
-          .filter(
-            (item) =>
-              item.link_id &&
-              item.product_id &&
-              item.product_title &&
-              item.deeplink,
-          )
-          .map(
-            (item): RecommendationProduct => ({
-              linkId: item.link_id!,
-              slot: item.slot ?? 0,
-              rationale: item.rationale,
-              productId: item.product_id!,
-              title: item.product_title!,
-              deeplink: item.deeplink!,
-              imageUrl: item.image_url,
-              brand: item.brand,
-              price: item.price,
-              currency: item.currency ?? "KRW",
-              availability: item.availability,
-              syncedAt: item.synced_at ?? new Date(0).toISOString(),
-            }),
-          );
+        const bundle = (await response.json()) as RecommendationProductBundle;
+        const items = Array.isArray(bundle.products) ? bundle.products : [];
 
         setProductState({
           status: "ready",
           items,
+          message:
+            items.length > 0
+              ? null
+              : "현재 이 추천 결과에 연결된 상품이 없습니다. 새로고침으로 다시 확인해보세요.",
         });
       } catch (error) {
         if (controller.signal.aborted) {
@@ -115,6 +167,8 @@ export function MacbookFinder() {
         setProductState({
           status: "error",
           items: [],
+          message:
+            "실구매 상품을 불러오는 중 문제가 생겼습니다. 잠시 후 다시 시도해주세요.",
         });
       }
     }
@@ -122,9 +176,17 @@ export function MacbookFinder() {
     void loadProducts();
 
     return () => controller.abort();
-  }, [recommendation]);
+  }, [recommendationProfileKey, reloadToken]);
 
   const handleChoice = (questionId: string, value: string, stepIndex: number) => {
+    if (!hasLoggedStart) {
+      setHasLoggedStart(true);
+      void logFinderEvent("started", {
+        questionId,
+        value,
+      });
+    }
+
     startTransition(() => {
       setAnswers((prev) => ({ ...prev, [questionId]: value }));
 
@@ -138,11 +200,21 @@ export function MacbookFinder() {
     startTransition(() => {
       setAnswers({});
       setCurrentStep(0);
+      setHasLoggedStart(false);
+      setLastCompletedProfileKey(null);
       setProductState({
         status: "idle",
         items: [],
+        message: null,
       });
     });
+  };
+
+  const handleRefreshProducts = () => {
+    void logFinderEvent("refreshed_products", {
+      recommendationProfileKey,
+    });
+    setReloadToken((value) => value + 1);
   };
 
   const formatPrice = (price: number | null, currency: string) => {
@@ -172,7 +244,7 @@ export function MacbookFinder() {
               나에게 맞는 맥북 찾기
             </h2>
             <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-              4개의 질문으로 Air와 Pro 사이를 빠르게 좁혀드립니다.
+              4개의 질문으로 Air와 Pro 사이를 빠르게 정리해드립니다.
             </p>
           </div>
           <div className="rounded-full border border-black/8 bg-white/55 px-4 py-2 text-sm text-[var(--muted)]">
@@ -279,128 +351,99 @@ export function MacbookFinder() {
                 </span>
               </div>
 
-              <div className="mt-6 grid gap-3 sm:grid-cols-2">
+              <div className="mt-6 grid gap-3 sm:grid-cols-3">
                 {recommendation.primary.highlights.map((highlight) => (
                   <div
                     key={highlight}
-                    className="rounded-[20px] border border-black/8 bg-white/64 px-4 py-3 text-sm leading-6 text-[var(--ink)]"
+                    className="rounded-[22px] border border-black/8 bg-white/60 px-4 py-4 text-sm leading-6 text-[var(--ink)]"
                   >
                     {highlight}
                   </div>
                 ))}
               </div>
 
-              <div className="mt-6 grid gap-3">
+              <div className="mt-6 space-y-3 rounded-[24px] border border-black/8 bg-white/62 p-5">
                 {recommendation.reasons.map((reason) => (
-                  <p
-                    key={reason}
-                    className="rounded-[20px] border border-black/8 bg-[rgba(247,244,240,0.76)] px-4 py-3 text-sm leading-7 text-[var(--muted)]"
-                  >
+                  <p key={reason} className="text-sm leading-7 text-[var(--muted)]">
                     {reason}
                   </p>
                 ))}
               </div>
 
               <div className="mt-6 flex flex-wrap gap-3">
-                <a
-                  href="#finder-products"
-                  className="inline-flex items-center justify-center rounded-full bg-[var(--ink)] px-5 py-3 text-sm text-white shadow-[0_20px_40px_rgba(24,26,31,0.18)]"
+                <button
+                  type="button"
+                  onClick={handleRefreshProducts}
+                  className="rounded-full border border-black/10 bg-white/80 px-4 py-2 text-sm text-[var(--ink)]"
                 >
-                  추천 상품 보기
-                </a>
+                  추천 상품 새로고침
+                </button>
                 <button
                   type="button"
                   onClick={handleReset}
-                  className="rounded-full border border-black/10 bg-white/70 px-5 py-3 text-sm text-[var(--ink)]"
+                  className="rounded-full border border-black/8 bg-transparent px-4 py-2 text-sm text-[var(--muted)]"
                 >
                   다시 진단하기
                 </button>
               </div>
             </div>
 
-            <div
-              id="finder-products"
-              className="rounded-[24px] border border-black/8 bg-white/60 p-5"
-            >
-              <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="rounded-[28px] border border-black/8 bg-[rgba(255,255,255,0.72)] p-6">
+              <div className="flex items-end justify-between gap-4">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
+                  <p className="text-sm uppercase tracking-[0.22em] text-[var(--muted)]">
                     Ready To Buy
                   </p>
-                  <p className="mt-2 text-lg font-medium tracking-[-0.04em] text-[var(--ink)]">
+                  <h4 className="mt-3 text-2xl font-medium tracking-[-0.04em] text-[var(--ink)]">
                     추천 결과에 맞는 실구매 상품
-                  </p>
+                  </h4>
                 </div>
-                <span className="rounded-full border border-black/8 bg-white/70 px-3 py-2 text-xs text-[var(--muted)]">
-                  {productState.items.length} item
-                  {productState.items.length === 1 ? "" : "s"}
-                </span>
+                <p className="text-sm text-[var(--muted)]">
+                  {productState.items.length} items
+                </p>
               </div>
 
               {productState.status === "loading" ? (
-                <div className="mt-5 grid gap-3">
-                  {[0, 1].map((item) => (
-                    <div
-                      key={item}
-                      className="animate-pulse rounded-[20px] border border-black/6 bg-[rgba(250,248,244,0.9)] p-4"
-                    >
-                      <div className="h-4 w-24 rounded-full bg-black/8" />
-                      <div className="mt-4 h-6 w-2/3 rounded-full bg-black/8" />
-                      <div className="mt-3 h-4 w-full rounded-full bg-black/6" />
-                    </div>
-                  ))}
+                <div className="mt-5 rounded-[20px] border border-dashed border-black/10 bg-[rgba(250,248,244,0.9)] px-4 py-5 text-sm leading-7 text-[var(--muted)]">
+                  {productState.message}
                 </div>
               ) : null}
 
-              {productState.status === "ready" && productState.items.length > 0 ? (
-                <div className="mt-5 grid gap-3">
+              {productState.items.length > 0 ? (
+                <div className="mt-5 grid gap-4">
                   {productState.items.map((item) => (
                     <article
                       key={item.linkId}
-                      className="rounded-[22px] border border-black/8 bg-[rgba(250,248,244,0.88)] p-4"
+                      className="rounded-[24px] border border-black/8 bg-white/70 p-5"
                     >
-                      <div className="flex items-start justify-between gap-3">
-                        <div>
+                      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                        <div className="min-w-0 flex-1">
                           <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
-                            Option {item.slot}
+                            {item.brand ?? "Recommended"}
                           </p>
-                          <h4 className="mt-2 text-lg font-medium leading-7 tracking-[-0.04em] text-[var(--ink)]">
+                          <h5 className="mt-2 text-xl font-medium tracking-[-0.04em] text-[var(--ink)]">
                             {item.title}
-                          </h4>
+                          </h5>
+                          {item.rationale ? (
+                            <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
+                              {item.rationale}
+                            </p>
+                          ) : null}
                         </div>
-                        <p className="text-sm text-[var(--muted)]">
-                          {formatPrice(item.price, item.currency)}
-                        </p>
-                      </div>
 
-                      <div className="mt-3 flex flex-wrap gap-2">
-                        {item.brand ? (
-                          <span className="rounded-full border border-black/8 bg-white/70 px-3 py-2 text-xs text-[var(--muted)]">
-                            {item.brand}
-                          </span>
-                        ) : null}
-                        {item.availability ? (
-                          <span className="rounded-full border border-black/8 bg-white/70 px-3 py-2 text-xs text-[var(--muted)]">
-                            {item.availability}
-                          </span>
-                        ) : null}
-                      </div>
-
-                      {item.rationale ? (
-                        <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
-                          {item.rationale}
-                        </p>
-                      ) : null}
-
-                      <div className="mt-4">
-                        <a
-                          href={item.deeplink}
-                          target="_blank"
-                          rel="noreferrer sponsored"
-                          className="inline-flex items-center justify-center rounded-full bg-[var(--ink)] px-4 py-3 text-sm text-white shadow-[0_20px_40px_rgba(24,26,31,0.16)]"
-                        >
-                          상품 보러 가기
-                        </a>
+                        <div className="shrink-0 text-left sm:text-right">
+                          <p className="text-sm text-[var(--muted)]">
+                            {formatPrice(item.price, item.currency)}
+                          </p>
+                          <a
+                            href={`/out/${item.linkId}`}
+                            target="_blank"
+                            rel="noopener noreferrer sponsored"
+                            className="mt-4 inline-flex items-center justify-center rounded-full bg-[var(--ink)] px-4 py-3 text-sm text-white shadow-[0_20px_40px_rgba(24,26,31,0.16)]"
+                          >
+                            상품 보러 가기
+                          </a>
+                        </div>
                       </div>
                     </article>
                   ))}
@@ -409,38 +452,29 @@ export function MacbookFinder() {
 
               {productState.status === "ready" && productState.items.length === 0 ? (
                 <div className="mt-5 rounded-[20px] border border-dashed border-black/10 bg-[rgba(250,248,244,0.9)] px-4 py-5 text-sm leading-7 text-[var(--muted)]">
-                  추천 결과는 준비됐습니다. 실구매 상품 매핑은 곧 연결됩니다.
+                  <p>{productState.message}</p>
+                  <button
+                    type="button"
+                    onClick={handleRefreshProducts}
+                    className="mt-4 rounded-full border border-black/10 bg-white/80 px-4 py-2 text-sm text-[var(--ink)]"
+                  >
+                    다시 확인하기
+                  </button>
                 </div>
               ) : null}
 
               {productState.status === "error" ? (
                 <div className="mt-5 rounded-[20px] border border-dashed border-black/10 bg-[rgba(250,248,244,0.9)] px-4 py-5 text-sm leading-7 text-[var(--muted)]">
-                  상품 정보를 불러오는 중 문제가 생겼습니다. 잠시 후 다시 확인해주세요.
+                  <p>{productState.message}</p>
+                  <button
+                    type="button"
+                    onClick={handleRefreshProducts}
+                    className="mt-4 rounded-full border border-black/10 bg-white/80 px-4 py-2 text-sm text-[var(--ink)]"
+                  >
+                    다시 시도하기
+                  </button>
                 </div>
               ) : null}
-            </div>
-
-            <div className="grid gap-3 md:grid-cols-[1fr_1fr]">
-              <div className="rounded-[24px] border border-black/8 bg-white/60 p-5">
-                <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
-                  Alternative
-                </p>
-                <p className="mt-3 text-2xl font-medium tracking-[-0.04em] text-[var(--ink)]">
-                  {recommendation.alternative.title}
-                </p>
-                <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
-                  {recommendation.alternative.tagline}
-                </p>
-              </div>
-
-              <div className="rounded-[24px] border border-black/8 bg-white/60 p-5">
-                <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
-                  Snapshot
-                </p>
-                <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
-                  {recommendation.snapshotNote}
-                </p>
-              </div>
             </div>
           </div>
         ) : null}

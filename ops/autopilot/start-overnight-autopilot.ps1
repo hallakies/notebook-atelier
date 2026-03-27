@@ -152,6 +152,13 @@ Before you finish this task:
 If the task is fully done, set status to `done`.
 If blocked, set status to `blocked` and explain why.
 If only partial progress is safe, keep status as `in_progress` and write the next step.
+
+Founder directives for tonight:
+
+- Ignore Instagram auto-publishing work
+- Ignore GA integration work
+- Do not install or upgrade global runtimes or tooling
+- Keep all work inside the repository plus local/autopilot state files
 "@
 
   $promptPath = Join-Path $runDir "prompt.txt"

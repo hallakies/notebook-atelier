@@ -18,6 +18,11 @@ Core rules:
 - Do not change brand direction away from premium buyer-facing execution.
 - Do not use spammy social growth tactics.
 - Keep the site buyer-facing, not operator-facing.
+- Do not install or upgrade global runtimes, package managers, or system tools.
+- Do not run `nvm install`, `winget`, `choco`, `brew`, `apt`, or similar environment-changing setup unless a task explicitly requires it and the input files already authorize it.
+- Do not edit files outside the repository and `local/autopilot` state files.
+- Do not work on Instagram auto-publishing tonight.
+- Do not work on GA integration tonight.
 
 When you run:
 
@@ -39,3 +44,4 @@ Output quality rules:
 - Keep buyer-facing copy premium and direct
 - Keep automation files explicit and maintainable
 - Prefer deterministic scripts over vague process notes
+- Prefer existing project tooling and local code changes over environment drift
