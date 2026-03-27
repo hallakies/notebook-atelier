@@ -6,6 +6,7 @@ import {
   getRecommendation,
   type FinderAnswers,
 } from "@/lib/macbook-finder";
+import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 import type { RecommendationProduct } from "@/lib/recommendation-products";
 
 const totalQuestions = finderQuestions.length;
@@ -13,6 +14,21 @@ const totalQuestions = finderQuestions.length;
 type ProductState = {
   status: "idle" | "loading" | "ready" | "error";
   items: RecommendationProduct[];
+};
+
+type RecommendationBundleRow = {
+  link_id: string | null;
+  slot: number | null;
+  rationale: string | null;
+  product_id: string | null;
+  product_title: string | null;
+  deeplink: string | null;
+  image_url: string | null;
+  brand: string | null;
+  price: number | null;
+  currency: string | null;
+  availability: string | null;
+  synced_at: string | null;
 };
 
 export function MacbookFinder() {
@@ -48,22 +64,46 @@ export function MacbookFinder() {
           items: [],
         });
 
-        const response = await fetch(`/api/recommendations/${profileKey}`, {
-          signal: controller.signal,
-          cache: "no-store",
-        });
+        const supabase = createBrowserSupabaseClient();
 
-        if (!response.ok) {
-          throw new Error(`Failed to load products for ${profileKey}`);
+        const { data, error } = await supabase
+          .rpc("get_recommendation_product_bundle", {
+            profile_key: profileKey,
+          })
+          .returns<RecommendationBundleRow[]>();
+
+        if (error) {
+          throw error;
         }
 
-        const payload = (await response.json()) as {
-          products?: RecommendationProduct[];
-        };
+        const items = (data ?? [])
+          .filter(
+            (item) =>
+              item.link_id &&
+              item.product_id &&
+              item.product_title &&
+              item.deeplink,
+          )
+          .map(
+            (item): RecommendationProduct => ({
+              linkId: item.link_id!,
+              slot: item.slot ?? 0,
+              rationale: item.rationale,
+              productId: item.product_id!,
+              title: item.product_title!,
+              deeplink: item.deeplink!,
+              imageUrl: item.image_url,
+              brand: item.brand,
+              price: item.price,
+              currency: item.currency ?? "KRW",
+              availability: item.availability,
+              syncedAt: item.synced_at ?? new Date(0).toISOString(),
+            }),
+          );
 
         setProductState({
           status: "ready",
-          items: payload.products ?? [],
+          items,
         });
       } catch (error) {
         if (controller.signal.aborted) {
@@ -354,9 +394,9 @@ export function MacbookFinder() {
 
                       <div className="mt-4">
                         <a
-                          href={`/out/${item.linkId}`}
+                          href={item.deeplink}
                           target="_blank"
-                          rel="noreferrer"
+                          rel="noreferrer sponsored"
                           className="inline-flex items-center justify-center rounded-full bg-[var(--ink)] px-4 py-3 text-sm text-white shadow-[0_20px_40px_rgba(24,26,31,0.16)]"
                         >
                           상품 보러 가기
