@@ -1,3 +1,8 @@
+import {
+  SUPABASE_PUBLIC_PUBLISHABLE_KEY,
+  SUPABASE_PUBLIC_URL,
+} from "@/lib/supabase/public-config";
+
 function readEnv(name: string) {
   const value = process.env[name];
 
@@ -9,14 +14,14 @@ function readEnv(name: string) {
 }
 
 export function getSupabaseUrl() {
-  return process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.SUPABASE_URL ?? "";
+  return process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.SUPABASE_URL ?? SUPABASE_PUBLIC_URL;
 }
 
 export function getSupabasePublishableKey() {
   return (
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ??
     process.env.SUPABASE_PUBLISHABLE_KEY ??
-    ""
+    SUPABASE_PUBLIC_PUBLISHABLE_KEY
   );
 }
 
@@ -26,14 +31,14 @@ export function getSupabaseServiceRoleKey() {
 
 export function requireSupabaseBrowserEnv() {
   return {
-    url: readEnv("NEXT_PUBLIC_SUPABASE_URL"),
-    publishableKey: readEnv("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY"),
+    url: getSupabaseUrl(),
+    publishableKey: getSupabasePublishableKey(),
   };
 }
 
 export function requireSupabaseServerEnv() {
   return {
-    url: process.env.SUPABASE_URL ?? readEnv("NEXT_PUBLIC_SUPABASE_URL"),
+    url: getSupabaseUrl(),
     serviceRoleKey: readEnv("SUPABASE_SERVICE_ROLE_KEY"),
   };
 }

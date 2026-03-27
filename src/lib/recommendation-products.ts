@@ -1,4 +1,7 @@
-import { createAdminSupabaseClient } from "@/lib/supabase/server";
+import {
+  createAdminSupabaseClient,
+  createReadOnlySupabaseClient,
+} from "@/lib/supabase/server";
 
 export type RecommendationProduct = {
   linkId: string;
@@ -53,7 +56,13 @@ type RecommendationProductLinkRow = {
 export async function getRecommendationProductBundle(
   profileKey: string,
 ): Promise<RecommendationProductBundle | null> {
-  const supabase = createAdminSupabaseClient();
+  let supabase;
+
+  try {
+    supabase = createAdminSupabaseClient();
+  } catch {
+    supabase = createReadOnlySupabaseClient();
+  }
 
   const { data: profile, error: profileError } = await supabase
     .from("recommendation_profiles")

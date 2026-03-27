@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
-import { createAdminSupabaseClient } from "@/lib/supabase/server";
+import {
+  createAdminSupabaseClient,
+  createReadOnlySupabaseClient,
+} from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 
@@ -21,7 +24,7 @@ type LinkedProductRow = {
 export async function GET(request: Request, context: RouteContext) {
   try {
     const { linkId } = await context.params;
-    const supabase = createAdminSupabaseClient();
+    const supabase = createReadOnlySupabaseClient();
 
     const { data, error } = await supabase
       .from("recommendation_product_links")
@@ -58,18 +61,23 @@ export async function GET(request: Request, context: RouteContext) {
       .find((part) => part.startsWith("na_session="))
       ?.split("=")[1];
 
-    const { error: clickError } = await supabase.from("affiliate_clicks").insert({
-      source_type: "recommendation",
-      source_id: data.recommendation_profile_id,
-      coupang_product_id: data.coupang_product_id,
-      destination_url: data.coupang_products.deeplink,
-      session_id: sessionId,
-      user_agent: userAgent,
-      referrer,
-    });
+    try {
+      const adminSupabase = createAdminSupabaseClient();
+      const { error: clickError } = await adminSupabase.from("affiliate_clicks").insert({
+        source_type: "recommendation",
+        source_id: data.recommendation_profile_id,
+        coupang_product_id: data.coupang_product_id,
+        destination_url: data.coupang_products.deeplink,
+        session_id: sessionId,
+        user_agent: userAgent,
+        referrer,
+      });
 
-    if (clickError) {
-      console.error("Failed to log affiliate click", clickError);
+      if (clickError) {
+        console.error("Failed to log affiliate click", clickError);
+      }
+    } catch {
+      // Click logging is optional when the service role key is not configured.
     }
 
     return NextResponse.redirect(data.coupang_products.deeplink, 307);
