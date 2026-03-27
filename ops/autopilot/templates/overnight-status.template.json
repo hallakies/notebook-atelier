@@ -1,0 +1,73 @@
+{
+  "objective": "Complete the overnight high-priority roadmap for Notebook Atelier with minimal founder intervention.",
+  "last_updated": "",
+  "tasks": [
+    {
+      "id": "ready-to-buy-stability",
+      "title": "Stabilize the Ready To Buy product block",
+      "priority": 1,
+      "status": "pending",
+      "done_when": [
+        "Live recommendation results show one or more matched products",
+        "Product links open correctly from the public site",
+        "Empty product states are handled visibly and safely"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "funnel-tracking",
+      "title": "Instrument recommendation and product click tracking",
+      "priority": 2,
+      "status": "pending",
+      "done_when": [
+        "Recommendation and outbound click events are stored with profile context",
+        "The implementation is safe for production use"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "mobile-buyer-funnel",
+      "title": "Tighten the mobile-first buyer funnel",
+      "priority": 3,
+      "status": "pending",
+      "done_when": [
+        "Homepage and result flow read clearly on mobile",
+        "No operator-facing copy remains in the main buyer flow"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "seo-article-system",
+      "title": "Create the first buying-intent article system",
+      "priority": 4,
+      "status": "pending",
+      "done_when": [
+        "There is a reusable article template structure",
+        "The first 5 high-intent article targets are defined in code or content files"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "instagram-content-pipeline",
+      "title": "Define the first Instagram content automation pipeline",
+      "priority": 5,
+      "status": "pending",
+      "done_when": [
+        "A repeatable article-to-carousel workflow exists",
+        "Caption and CTA templates are documented"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "weekly-kpi-reporting",
+      "title": "Prepare the first weekly KPI reporting structure",
+      "priority": 6,
+      "status": "pending",
+      "done_when": [
+        "The first report format exists",
+        "Key inputs and sources are documented"
+      ],
+      "notes": ""
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "project": {
+    "site_name": "Notebook Atelier",
+    "primary_domain": "https://notebook-at.vercel.app",
+    "target_market": "KR",
+    "primary_offer": "MacBook and premium notebook buying decision tool",
+    "instagram_handle": "macbook__boy"
+  },
+  "brand": {
+    "tone": [
+      "premium",
+      "calm",
+      "decisive"
+    ],
+    "visual_direction": "Apple-adjacent restraint, not imitation",
+    "must_not_do": [
+      "Apple impersonation",
+      "spam follow/unfollow",
+      "cheap AI-sounding copy"
+    ]
+  },
+  "commerce": {
+    "affiliate_network": "Coupang Partners",
+    "product_priority_rules": [
+      "Prefer stable listings",
+      "Prefer listings with strong review count",
+      "Prefer clear seller and fulfillment signals"
+    ]
+  },
+  "ops": {
+    "coupang_ready": true,
+    "supabase_ready": true,
+    "vercel_ready": true
+  },
+  "analytics": {
+    "ga4_measurement_id": "",
+    "search_console_site_url": "",
+    "posthog_project_info": ""
+  },
+  "references": {
+    "preferred_reference_sites": [],
+    "preferred_reference_instagram_accounts": []
+  },
+  "founder_rules": {
+    "must_ask_before": [
+      "legal risk",
+      "major brand change",
+      "platform-risk actions"
+    ]
+  }
+}

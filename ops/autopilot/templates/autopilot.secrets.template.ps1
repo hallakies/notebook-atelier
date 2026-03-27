@@ -1,0 +1,8 @@
+$env:GITHUB_TOKEN = ""
+$env:SUPABASE_ACCESS_TOKEN = ""
+$env:OPENAI_API_KEY = ""
+$env:META_APP_ID = ""
+$env:META_APP_SECRET = ""
+$env:INSTAGRAM_BUSINESS_ACCOUNT_ID = ""
+$env:FACEBOOK_PAGE_ID = ""
+$env:GA4_MEASUREMENT_ID = ""
