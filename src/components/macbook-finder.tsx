@@ -1,17 +1,16 @@
 "use client";
 
-import { useCallback, useEffect, useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import {
   finderQuestions,
   getRecommendation,
   type FinderAnswers,
 } from "@/lib/macbook-finder";
-import type {
-  RecommendationProduct,
-  RecommendationProductBundle,
-} from "@/lib/recommendation-products";
+import type { RecommendationProduct } from "@/lib/recommendation-products";
+import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 
 const totalQuestions = finderQuestions.length;
+const productCacheTtlMs = 1000 * 60 * 60 * 6;
 
 type ProductState = {
   status: "idle" | "loading" | "ready" | "error";
@@ -19,14 +18,26 @@ type ProductState = {
   message: string | null;
 };
 
+type RecommendationBundleRow = {
+  link_id: string | null;
+  slot: number | null;
+  rationale: string | null;
+  product_id: string | null;
+  product_title: string | null;
+  deeplink: string | null;
+  image_url: string | null;
+  brand: string | null;
+  price: number | null;
+  currency: string | null;
+  availability: string | null;
+  synced_at: string | null;
+};
+
 export function MacbookFinder() {
   const [answers, setAnswers] = useState<FinderAnswers>({});
   const [currentStep, setCurrentStep] = useState(0);
   const [isPending, startTransition] = useTransition();
   const [reloadToken, setReloadToken] = useState(0);
-  const [sessionId, setSessionId] = useState<string | null>(null);
-  const [hasLoggedStart, setHasLoggedStart] = useState(false);
-  const [lastCompletedProfileKey, setLastCompletedProfileKey] = useState<string | null>(null);
   const [productState, setProductState] = useState<ProductState>({
     status: "idle",
     items: [],
@@ -38,80 +49,6 @@ export function MacbookFinder() {
   const activeQuestion = finderQuestions[currentStep];
   const recommendation = isComplete ? getRecommendation(answers) : null;
   const recommendationProfileKey = recommendation?.primary.id ?? null;
-
-  useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    const writeSessionCookie = (value: string) => {
-      document.cookie = `na_session=${value}; Path=/; Max-Age=${60 * 60 * 24 * 30}; SameSite=Lax`;
-    };
-
-    const existingSessionId = window.localStorage.getItem("na_session_id");
-    if (existingSessionId) {
-      writeSessionCookie(existingSessionId);
-      setSessionId(existingSessionId);
-      return;
-    }
-
-    const nextSessionId =
-      typeof crypto !== "undefined" && "randomUUID" in crypto
-        ? crypto.randomUUID()
-        : `na-${Date.now()}`;
-
-    window.localStorage.setItem("na_session_id", nextSessionId);
-    writeSessionCookie(nextSessionId);
-    setSessionId(nextSessionId);
-  }, []);
-
-  const logFinderEvent = useCallback(
-    async (
-      eventType: "started" | "completed" | "refreshed_products",
-      metadata: Record<string, unknown> = {},
-    ) => {
-      try {
-        await fetch("/api/finder-events", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            sessionId,
-            eventType,
-            recommendationProfileKey,
-            sourcePage: "/#finder",
-            metadata,
-          }),
-        });
-      } catch (error) {
-        console.error("Failed to log finder event", error);
-      }
-    },
-    [recommendationProfileKey, sessionId],
-  );
-
-  useEffect(() => {
-    if (!sessionId || !recommendationProfileKey) {
-      return;
-    }
-
-    if (lastCompletedProfileKey === recommendationProfileKey) {
-      return;
-    }
-
-    void logFinderEvent("completed", {
-      answers,
-      recommendationProfileKey,
-    });
-    setLastCompletedProfileKey(recommendationProfileKey);
-  }, [
-    answers,
-    lastCompletedProfileKey,
-    logFinderEvent,
-    recommendationProfileKey,
-    sessionId,
-  ]);
 
   useEffect(() => {
     if (!recommendationProfileKey) {
@@ -128,26 +65,94 @@ export function MacbookFinder() {
 
     async function loadProducts() {
       try {
+        const supabase = createBrowserSupabaseClient();
+        const cacheKey = `na:products:${profileKey}`;
+
         setProductState({
           status: "loading",
           items: [],
           message: "추천 결과에 맞는 실구매 상품을 확인하고 있습니다.",
         });
 
-        const response = await fetch(
-          `/api/recommendations/${encodeURIComponent(profileKey)}`,
-          {
-            cache: "no-store",
-            signal: controller.signal,
-          },
-        );
+        if (typeof window !== "undefined" && reloadToken === 0) {
+          const cachedValue = window.localStorage.getItem(cacheKey);
 
-        if (!response.ok) {
-          throw new Error(`Failed to load recommendation products (${response.status})`);
+          if (cachedValue) {
+            try {
+              const parsed = JSON.parse(cachedValue) as {
+                savedAt: number;
+                items: RecommendationProduct[];
+              };
+
+              if (
+                parsed.savedAt &&
+                Date.now() - parsed.savedAt < productCacheTtlMs &&
+                Array.isArray(parsed.items)
+              ) {
+                setProductState({
+                  status: "ready",
+                  items: parsed.items,
+                  message:
+                    parsed.items.length > 0
+                      ? null
+                      : "현재 이 추천 결과에 연결된 상품이 없습니다. 새로고침으로 다시 확인해보세요.",
+                });
+                return;
+              }
+            } catch {
+              window.localStorage.removeItem(cacheKey);
+            }
+          }
         }
 
-        const bundle = (await response.json()) as RecommendationProductBundle;
-        const items = Array.isArray(bundle.products) ? bundle.products : [];
+        const { data, error } = await supabase
+          .rpc("get_recommendation_product_bundle", {
+            profile_key: profileKey,
+          })
+          .returns<RecommendationBundleRow[]>();
+
+        if (error) {
+          throw error;
+        }
+
+        if (controller.signal.aborted) {
+          return;
+        }
+
+        const items = (data ?? [])
+          .filter(
+            (item) =>
+              item.link_id &&
+              item.product_id &&
+              item.product_title &&
+              item.deeplink,
+          )
+          .map(
+            (item): RecommendationProduct => ({
+              linkId: item.link_id!,
+              slot: item.slot ?? 0,
+              rationale: item.rationale,
+              productId: item.product_id!,
+              title: item.product_title!,
+              deeplink: item.deeplink!,
+              imageUrl: item.image_url,
+              brand: item.brand,
+              price: item.price,
+              currency: item.currency ?? "KRW",
+              availability: item.availability,
+              syncedAt: item.synced_at ?? new Date(0).toISOString(),
+            }),
+          );
+
+        if (typeof window !== "undefined") {
+          window.localStorage.setItem(
+            cacheKey,
+            JSON.stringify({
+              savedAt: Date.now(),
+              items,
+            }),
+          );
+        }
 
         setProductState({
           status: "ready",
@@ -179,14 +184,6 @@ export function MacbookFinder() {
   }, [recommendationProfileKey, reloadToken]);
 
   const handleChoice = (questionId: string, value: string, stepIndex: number) => {
-    if (!hasLoggedStart) {
-      setHasLoggedStart(true);
-      void logFinderEvent("started", {
-        questionId,
-        value,
-      });
-    }
-
     startTransition(() => {
       setAnswers((prev) => ({ ...prev, [questionId]: value }));
 
@@ -200,8 +197,6 @@ export function MacbookFinder() {
     startTransition(() => {
       setAnswers({});
       setCurrentStep(0);
-      setHasLoggedStart(false);
-      setLastCompletedProfileKey(null);
       setProductState({
         status: "idle",
         items: [],
@@ -211,9 +206,6 @@ export function MacbookFinder() {
   };
 
   const handleRefreshProducts = () => {
-    void logFinderEvent("refreshed_products", {
-      recommendationProfileKey,
-    });
     setReloadToken((value) => value + 1);
   };
 
@@ -436,7 +428,7 @@ export function MacbookFinder() {
                             {formatPrice(item.price, item.currency)}
                           </p>
                           <a
-                            href={`/out/${item.linkId}`}
+                            href={item.deeplink}
                             target="_blank"
                             rel="noopener noreferrer sponsored"
                             className="mt-4 inline-flex items-center justify-center rounded-full bg-[var(--ink)] px-4 py-3 text-sm text-white shadow-[0_20px_40px_rgba(24,26,31,0.16)]"

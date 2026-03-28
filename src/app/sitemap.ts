@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { buyingGuides } from "@/content/buying-guides";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://notebook-at.vercel.app";
+export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const guideEntries: MetadataRoute.Sitemap = buyingGuides.map((guide) => ({
