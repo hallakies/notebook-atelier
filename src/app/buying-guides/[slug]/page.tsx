@@ -81,6 +81,19 @@ export default async function BuyingGuideDetailPage(context: RouteContext) {
       />
       <article className="mx-auto max-w-4xl">
         <header className="rounded-[32px] border border-black/6 bg-[rgba(255,255,255,0.7)] p-6 shadow-[0_28px_80px_rgba(35,38,43,0.08)] backdrop-blur-xl sm:p-8">
+          <nav className="flex flex-wrap items-center gap-2 text-sm text-[var(--muted)]">
+            <Link href="/" className="rounded-full border border-black/8 bg-white/72 px-3 py-2">
+              홈
+            </Link>
+            <span>/</span>
+            <Link href="/buying-guides" className="rounded-full border border-black/8 bg-white/72 px-3 py-2">
+              구매 가이드
+            </Link>
+            <span>/</span>
+            <span className="rounded-full border border-black/8 bg-[rgba(255,255,255,0.42)] px-3 py-2 text-[var(--ink)]">
+              {guide.title}
+            </span>
+          </nav>
           <p className="eyebrow">{guide.category}</p>
           <h1 className="mt-4 font-display text-5xl tracking-[-0.06em] text-[var(--ink)]">
             {guide.title}
@@ -88,6 +101,17 @@ export default async function BuyingGuideDetailPage(context: RouteContext) {
           <p className="mt-5 text-base leading-8 text-[var(--muted)] sm:text-lg">
             {guide.heroIntro}
           </p>
+          <div className="mt-5 flex flex-wrap gap-2 text-sm text-[var(--muted)]">
+            <span className="rounded-full border border-black/8 bg-white/72 px-3 py-2">
+              발행일 {guide.publishedAt}
+            </span>
+            <Link
+              href="/#finder"
+              className="rounded-full border border-black/8 bg-white/72 px-3 py-2 text-[var(--ink)]"
+            >
+              4문항 진단 바로가기
+            </Link>
+          </div>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link className="primary-link" href="/#finder">
               4문항으로 바로 진단하기

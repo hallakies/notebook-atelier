@@ -62,6 +62,60 @@ export default function BuyingGuidesIndexPage() {
           </div>
         </header>
 
+        <section className="mt-10 rounded-[30px] border border-black/6 bg-[rgba(255,255,255,0.62)] p-6 backdrop-blur-xl">
+          <p className="eyebrow">Start Here</p>
+          <h2 className="mt-4 text-3xl font-medium tracking-[-0.05em] text-[var(--ink)]">
+            어디서 시작할지 모르겠다면 이렇게 가면 됩니다
+          </h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            <article className="surface-panel">
+              <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">처음 사는 경우</p>
+              <h3 className="mt-4 text-2xl font-medium tracking-[-0.04em] text-[var(--ink)]">
+                입문자용 가이드부터
+              </h3>
+              <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
+                아직 Air와 Pro도 헷갈린다면 첫 맥북 기준부터 보는 편이 가장 빠릅니다.
+              </p>
+              <Link
+                href="/buying-guides/best-first-macbook"
+                className="mt-6 inline-flex rounded-full border border-black/10 bg-white/75 px-4 py-2 text-sm text-[var(--ink)]"
+              >
+                입문 가이드 보기
+              </Link>
+            </article>
+            <article className="surface-panel">
+              <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">두 모델로 좁혀진 경우</p>
+              <h3 className="mt-4 text-2xl font-medium tracking-[-0.04em] text-[var(--ink)]">
+                비교 가이드로
+              </h3>
+              <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
+                에어와 프로, 13과 15처럼 선택지가 둘로 줄었다면 비교 글부터 보면 됩니다.
+              </p>
+              <Link
+                href="/buying-guides/macbook-air-vs-pro"
+                className="mt-6 inline-flex rounded-full border border-black/10 bg-white/75 px-4 py-2 text-sm text-[var(--ink)]"
+              >
+                비교 가이드 보기
+              </Link>
+            </article>
+            <article className="surface-panel">
+              <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">바로 결론이 필요한 경우</p>
+              <h3 className="mt-4 text-2xl font-medium tracking-[-0.04em] text-[var(--ink)]">
+                4문항 진단으로
+              </h3>
+              <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
+                읽는 시간 없이 바로 추천 모델을 보고 싶다면 설문부터 시작하는 편이 가장 빠릅니다.
+              </p>
+              <Link
+                href="/#finder"
+                className="mt-6 inline-flex rounded-full border border-transparent bg-[var(--ink)] px-4 py-2 text-sm text-white"
+              >
+                바로 진단하기
+              </Link>
+            </article>
+          </div>
+        </section>
+
         <section className="mt-10 rounded-[30px] border border-black/6 bg-[rgba(255,255,255,0.54)] p-6 backdrop-blur-xl">
           <p className="eyebrow">Starter Guides</p>
           <h2 className="mt-4 text-3xl font-medium tracking-[-0.05em] text-[var(--ink)]">
