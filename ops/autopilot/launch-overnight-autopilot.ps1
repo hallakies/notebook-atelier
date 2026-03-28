@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
-  [int]$MaxCycles = 8,
-  [int]$PauseSeconds = 5,
+  [int]$MaxCycles = 0,
+  [int]$PauseSeconds = 20,
   [switch]$UseSearch
 )
 

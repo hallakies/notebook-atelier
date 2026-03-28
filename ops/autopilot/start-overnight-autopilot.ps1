@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
-  [int]$MaxCycles = 8,
-  [int]$PauseSeconds = 5,
+  [int]$MaxCycles = 0,
+  [int]$PauseSeconds = 20,
   [switch]$UseSearch
 )
 
@@ -38,6 +38,77 @@ function Save-Json {
   $Data | ConvertTo-Json -Depth 50 | Set-Content -Path $Path -Encoding UTF8
 }
 
+function Add-ProgressEntry {
+  param(
+    [string]$Path,
+    [string]$TaskId,
+    [string]$Message
+  )
+
+  Add-Content -Path $Path -Value "## $(Get-Date -Format s) - $TaskId`r`n$Message`r`n"
+}
+
+function Get-TaskAttemptCount {
+  param([object]$Task)
+
+  if ($null -eq $Task.attempts) {
+    return 0
+  }
+
+  return [int]$Task.attempts
+}
+
+function Touch-Heartbeat {
+  param(
+    [string]$Path,
+    [string]$State,
+    [string]$TaskId
+  )
+
+  $payload = [ordered]@{
+    timestamp = (Get-Date).ToString("s")
+    state = $State
+    task_id = $TaskId
+  }
+
+  $payload | ConvertTo-Json | Set-Content -Path $Path -Encoding UTF8
+}
+
+function Test-StopRequested {
+  param([string]$Path)
+
+  if (-not (Test-Path $Path)) {
+    return $false
+  }
+
+  $content = (Get-Content $Path -Raw -ErrorAction SilentlyContinue).Trim()
+  return $content -eq "stop"
+}
+
+function Get-NextTask {
+  param([object]$StatusData)
+
+  $retryableBlocked = @(
+    $StatusData.tasks |
+      Where-Object {
+        $_.status -eq "blocked" -and
+        ($null -eq $_.retry_after -or [string]::IsNullOrWhiteSpace($_.retry_after) -or ([datetime]$_.retry_after) -le (Get-Date))
+      } |
+      Sort-Object priority
+  )
+
+  if ($retryableBlocked.Count -gt 0) {
+    return $retryableBlocked[0]
+  }
+
+  $pending = @($StatusData.tasks | Where-Object { $_.status -eq "pending" } | Sort-Object priority)
+  if ($pending.Count -gt 0) {
+    return $pending[0]
+  }
+
+  return $null
+}
+
 function Assert-InputFields {
   param([object]$InputData)
 
@@ -63,6 +134,7 @@ $inputPath = Join-Path $localDir "overnight-input.json"
 $statusPath = Join-Path $localDir "overnight-status.json"
 $progressPath = Join-Path $localDir "progress.md"
 $stopPath = Join-Path $localDir "STOP"
+$heartbeatPath = Join-Path $localDir "heartbeat.json"
 $secretsPath = Join-Path $localDir "autopilot.secrets.ps1"
 $rootSecretsPath = Join-Path $repoRoot ".codex.secrets.ps1"
 
@@ -94,39 +166,55 @@ if (-not (Test-Path $progressPath)) {
 $inputData = Load-Json -Path $inputPath
 Assert-InputFields -InputData $inputData
 
-for ($cycle = 1; $cycle -le $MaxCycles; $cycle++) {
-  if (Test-Path $stopPath) {
+$cycle = 0
+
+while ($true) {
+  $cycle += 1
+
+  if ($MaxCycles -gt 0 -and $cycle -gt $MaxCycles) {
+    Write-Host "Reached MaxCycles=$MaxCycles. Ending autopilot."
+    break
+  }
+
+  if (Test-StopRequested -Path $stopPath) {
     Write-Host "STOP file detected. Ending autopilot."
     break
   }
 
   $statusData = Load-Json -Path $statusPath
-  $task = $statusData.tasks | Where-Object { $_.status -eq "pending" } | Sort-Object priority | Select-Object -First 1
+  $task = Get-NextTask -StatusData $statusData
 
   if (-not $task) {
-    Write-Host "No pending tasks remain."
-    break
+    Touch-Heartbeat -Path $heartbeatPath -State "idle" -TaskId ""
+    Write-Host "No runnable tasks remain. Sleeping."
+    Start-Sleep -Seconds ([Math]::Max($PauseSeconds, 60))
+    continue
   }
 
   foreach ($item in $statusData.tasks) {
     if ($item.id -eq $task.id) {
       $item.status = "in_progress"
       $item.notes = "Started by autopilot on $(Get-Date -Format s)"
+      $item.attempts = (Get-TaskAttemptCount -Task $item) + 1
+      $item.last_started_at = (Get-Date).ToString("s")
     }
   }
   Save-Json -Path $statusPath -Data $statusData
+  Touch-Heartbeat -Path $heartbeatPath -State "running" -TaskId $task.id
 
   $runStamp = Get-Date -Format "yyyyMMdd-HHmmss"
   $runDir = Join-Path $runsDir "$runStamp-$($task.id)"
   New-Item -ItemType Directory -Path $runDir -Force | Out-Null
 
   $doneWhen = @($task.done_when | ForEach-Object { "- $_" }) -join "`r`n"
+  $taskId = [string]$task.id
+  $taskTitle = [string]$task.title
   $prompt = @"
 $(Get-Content $promptTemplatePath -Raw)
 
 Current cycle: $cycle / $MaxCycles
-Current task id: $($task.id)
-Current task title: $($task.title)
+Current task id: $taskId
+Current task title: $taskTitle
 
 Done conditions:
 $doneWhen
@@ -145,12 +233,12 @@ Before you finish this task:
 
 1. Make actual progress in the repository.
 2. Run relevant validation.
-3. Update local/autopilot/overnight-status.json for task `$($task.id)`.
+3. Update local/autopilot/overnight-status.json for task `"$taskId"`.
 4. Append a progress entry to local/autopilot/progress.md.
 5. Leave the repository in a workable state.
 
 If the task is fully done, set status to `done`.
-If blocked, set status to `blocked` and explain why.
+If blocked, set status to `blocked`, explain why, and set a short `retry_after` timestamp if retrying later makes sense.
 If only partial progress is safe, keep status as `in_progress` and write the next step.
 
 Founder directives for tonight:
@@ -193,13 +281,15 @@ Founder directives for tonight:
     foreach ($item in $statusAfterRun.tasks) {
       if ($item.id -eq $task.id -and $item.status -eq "in_progress") {
         $item.status = "blocked"
+        $item.retry_after = (Get-Date).AddMinutes(10).ToString("s")
         $item.notes = "Autopilot harness saw codex exit code $codexExitCode on $(Get-Date -Format s). Review $logPath."
       }
     }
     Save-Json -Path $statusPath -Data $statusAfterRun
-    Add-Content -Path $progressPath -Value "## $(Get-Date -Format s) - $($task.id)`r`nHarness failure with exit code $codexExitCode. Review $logPath.`r`n"
+    Add-ProgressEntry -Path $progressPath -TaskId $task.id -Message "Harness failure with exit code $codexExitCode. Review $logPath."
   }
 
+  Touch-Heartbeat -Path $heartbeatPath -State "sleeping" -TaskId $task.id
   Start-Sleep -Seconds $PauseSeconds
 }
 
