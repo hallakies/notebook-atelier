@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import {
   finderQuestions,
   getRecommendation,
@@ -43,6 +43,9 @@ export function MacbookFinder() {
     items: [],
     message: null,
   });
+  const recommendationRef = useRef<HTMLDivElement | null>(null);
+  const readyToBuyRef = useRef<HTMLDivElement | null>(null);
+  const hasScrolledToRecommendation = useRef(false);
 
   const answeredCount = finderQuestions.filter((question) => answers[question.id]).length;
   const isComplete = answeredCount === totalQuestions;
@@ -67,6 +70,17 @@ export function MacbookFinder() {
       body: "현재 연결된 실구매 상품으로 이어집니다.",
     },
   ];
+  const latestSyncedAt = productState.items.reduce<string | null>((latest, item) => {
+    if (!item.syncedAt) {
+      return latest;
+    }
+
+    if (!latest) {
+      return item.syncedAt;
+    }
+
+    return new Date(item.syncedAt).getTime() > new Date(latest).getTime() ? item.syncedAt : latest;
+  }, null);
 
   useEffect(() => {
     if (!recommendationProfileKey) {
@@ -201,6 +215,18 @@ export function MacbookFinder() {
     return () => controller.abort();
   }, [recommendationProfileKey, reloadToken]);
 
+  useEffect(() => {
+    if (!isComplete || hasScrolledToRecommendation.current) {
+      return;
+    }
+
+    recommendationRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+    hasScrolledToRecommendation.current = true;
+  }, [isComplete]);
+
   const handleChoice = (questionId: string, value: string, stepIndex: number) => {
     startTransition(() => {
       setAnswers((prev) => ({ ...prev, [questionId]: value }));
@@ -215,6 +241,7 @@ export function MacbookFinder() {
     startTransition(() => {
       setAnswers({});
       setCurrentStep(0);
+      hasScrolledToRecommendation.current = false;
       setProductState({
         status: "idle",
         items: [],
@@ -237,6 +264,19 @@ export function MacbookFinder() {
       currency,
       maximumFractionDigits: 0,
     }).format(price);
+  };
+
+  const formatSyncedAt = (value: string | null) => {
+    if (!value) {
+      return "";
+    }
+
+    return new Intl.DateTimeFormat("ko-KR", {
+      month: "numeric",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+    }).format(new Date(value));
   };
 
   return (
@@ -371,7 +411,10 @@ export function MacbookFinder() {
           </div>
         ) : recommendation ? (
           <div className="mt-7 space-y-6">
-            <div className="rounded-[28px] border border-black/8 bg-[linear-gradient(145deg,rgba(255,255,255,0.82),rgba(243,238,232,0.86))] p-6">
+            <div
+              ref={recommendationRef}
+              className="rounded-[28px] border border-black/8 bg-[linear-gradient(145deg,rgba(255,255,255,0.82),rgba(243,238,232,0.86))] p-6"
+            >
               <p className="text-sm uppercase tracking-[0.22em] text-[var(--muted)]">
                 Step 2 · Your Match
               </p>
@@ -433,6 +476,7 @@ export function MacbookFinder() {
 
             <div
               id="ready-to-buy"
+              ref={readyToBuyRef}
               className="rounded-[28px] border border-[rgba(159,125,87,0.24)] bg-[linear-gradient(160deg,rgba(255,255,255,0.78),rgba(245,236,225,0.88))] p-6 shadow-[0_24px_48px_rgba(159,125,87,0.08)]"
             >
               <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
@@ -445,6 +489,9 @@ export function MacbookFinder() {
                   </h4>
                   <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
                     현재 연결된 판매 링크만 보여드립니다. 가격과 판매처를 확인한 뒤 바로 이동하세요.
+                  </p>
+                  <p className="mt-2 text-xs leading-6 text-[var(--muted)]">
+                    신품 Apple 본체 위주로 선별하며, 재고 상황에 따라 동일 계열 최신형으로 연결될 수 있습니다.
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
@@ -511,6 +558,11 @@ export function MacbookFinder() {
               <p className="mt-5 text-xs leading-6 text-[var(--muted)]">
                 이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.
               </p>
+              {latestSyncedAt ? (
+                <p className="mt-1 text-xs leading-6 text-[var(--muted)]">
+                  최근 확인 시각: {formatSyncedAt(latestSyncedAt)}
+                </p>
+              ) : null}
 
               {productState.status === "ready" && productState.items.length === 0 ? (
                 <div className="mt-5 rounded-[20px] border border-dashed border-black/10 bg-[rgba(250,248,244,0.9)] px-4 py-5 text-sm leading-7 text-[var(--muted)]">
