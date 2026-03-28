@@ -42,6 +42,9 @@ export default async function BuyingGuideDetailPage(context: RouteContext) {
   }
 
   const recommendedModels = getBuyingGuideRecommendations(slug);
+  const relatedGuides = buyingGuides
+    .filter((item) => item.slug !== slug)
+    .slice(0, 3);
 
   return (
     <main className="px-4 py-8 sm:px-6 lg:px-8">
@@ -106,6 +109,40 @@ export default async function BuyingGuideDetailPage(context: RouteContext) {
           </div>
           <div className="mt-6 rounded-[22px] border border-black/8 bg-white/75 p-5 text-sm leading-7 text-[var(--muted)]">
             {guide.finderPrompt}
+          </div>
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+            <Link className="primary-link w-full justify-center sm:w-auto" href="/#finder">
+              바로 진단하고 추천 받기
+            </Link>
+            <Link className="secondary-link w-full justify-center sm:w-auto" href="/">
+              홈으로 돌아가기
+            </Link>
+          </div>
+        </section>
+
+        <section className="mt-10 rounded-[28px] border border-black/6 bg-[rgba(255,255,255,0.58)] p-6 backdrop-blur-xl">
+          <p className="eyebrow">Related Guides</p>
+          <h2 className="mt-4 text-3xl font-medium tracking-[-0.05em] text-[var(--ink)]">
+            이어서 보기 좋은 구매 가이드
+          </h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {relatedGuides.map((item) => (
+              <Link
+                key={item.slug}
+                href={`/buying-guides/${item.slug}`}
+                className="rounded-[22px] border border-black/8 bg-white/72 p-5 transition hover:-translate-y-[1px] hover:border-black/12"
+              >
+                <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
+                  {item.category}
+                </p>
+                <h3 className="mt-3 text-xl font-medium tracking-[-0.04em] text-[var(--ink)]">
+                  {item.title}
+                </h3>
+                <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
+                  {item.excerpt}
+                </p>
+              </Link>
+            ))}
           </div>
         </section>
       </article>

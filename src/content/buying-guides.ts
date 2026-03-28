@@ -165,6 +165,64 @@ export const buyingGuides: BuyingGuide[] = [
       },
     ],
   },
+  {
+    slug: "best-macbook-for-office-work",
+    category: "직장인용 맥북",
+    title: "직장인에게 맞는 맥북은 무엇일까",
+    excerpt: "문서, 메일, 화상회의, 멀티태스킹 중심의 업무 환경에서 어떤 맥북이 가장 합리적인지 정리합니다.",
+    seoTitle: "직장인 맥북 추천 | 업무용 MacBook 고르기",
+    seoDescription: "문서 작업과 화상회의, 멀티태스킹 중심의 업무 환경에서 직장인에게 맞는 맥북을 고르는 기준을 정리한 가이드.",
+    publishedAt: "2026-03-28",
+    heroIntro:
+      "직장인용 맥북에서는 최고 성능보다 안정적인 배터리, 회의와 이동에 편한 무게, 여러 앱을 동시에 열어도 답답하지 않은 여유가 더 중요합니다.",
+    finderPrompt: "업무 방식 기준으로 어떤 맥북이 가장 잘 맞는지 바로 진단해보세요.",
+    recommendedModelIds: ["air-13-m5", "air-15-m5", "pro-14-m5"],
+    sections: [
+      {
+        title: "문서와 회의 중심이라면",
+        paragraphs: [
+          "슬랙, 메일, 노션, 브라우저, 화상회의가 중심인 업무 환경이라면 Air 계열이 가장 편하고 효율적입니다.",
+          "특히 외근과 이동이 잦다면 Air 13이 가볍고 부담이 적어 만족도가 높습니다.",
+        ],
+      },
+      {
+        title: "멀티태스킹이 많다면",
+        paragraphs: [
+          "엑셀, 브라우저 탭, 메신저, 화상회의, 외부 모니터가 동시에 열리는 경우라면 Air 15나 Pro 14가 더 안정적입니다.",
+          "작업이 끊기지 않는 여유가 중요하다면 Pro 14가 가장 무난한 상위 선택입니다.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "best-macbook-for-video-editing",
+    category: "영상편집 맥북",
+    title: "영상 편집용 맥북은 무엇이 좋을까",
+    excerpt: "프리미어 프로, 파이널 컷, 큰 파일 미리보기와 렌더링 기준에서 영상 편집용 맥북을 정리합니다.",
+    seoTitle: "영상 편집 맥북 추천 | 크리에이터용 MacBook 고르기",
+    seoDescription: "영상 편집과 디자인 작업 기준으로 Air와 Pro 중 어떤 맥북이 적합한지 정리한 크리에이터용 가이드.",
+    publishedAt: "2026-03-28",
+    heroIntro:
+      "영상 편집용 맥북은 단순히 열리는지보다, 타임라인이 끊기지 않는지와 긴 작업을 버틸 수 있는지가 핵심입니다.",
+    finderPrompt: "영상 편집과 크리에이티브 작업 기준으로 가장 맞는 모델을 확인해보세요.",
+    recommendedModelIds: ["pro-14-m5-pro", "pro-16-m5-max"],
+    sections: [
+      {
+        title: "Air로 가능한 편집 작업",
+        paragraphs: [
+          "짧은 클립 편집, 가벼운 컷 편집, 자막 작업 정도라면 Air도 충분할 수 있습니다.",
+          "다만 레이어가 많아지거나 긴 영상, 고해상도 소스를 다루면 곧 한계가 드러날 수 있습니다.",
+        ],
+      },
+      {
+        title: "Pro가 필요한 작업",
+        paragraphs: [
+          "긴 타임라인, 반복 렌더링, 색보정, 여러 크리에이티브 앱을 함께 여는 작업은 Pro 계열이 훨씬 안정적입니다.",
+          "영상 편집이 수익과 직결된다면 MacBook Pro 14 이상부터 보는 편이 안전합니다.",
+        ],
+      },
+    ],
+  },
 ];
 
 export function getBuyingGuideBySlug(slug: string) {

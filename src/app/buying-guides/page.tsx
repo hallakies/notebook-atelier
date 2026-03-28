@@ -20,6 +20,11 @@ export default function BuyingGuidesIndexPage() {
           <p className="mt-5 text-base leading-8 text-[var(--muted)] sm:text-lg">
             Air와 Pro 차이, 학생용과 개발자용 기준, 지금 사도 되는지 같은 구매 의도형 주제만 모았습니다.
           </p>
+          <div className="mt-6">
+            <Link className="primary-link" href="/#finder">
+              먼저 진단하고 추천 받기
+            </Link>
+          </div>
         </header>
 
         <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
