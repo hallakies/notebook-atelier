@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { MacbookFinder } from "@/components/macbook-finder";
+import { buyingGuides } from "@/content/buying-guides";
 import { lineupSnapshotNote } from "@/lib/macbook-finder";
 
 const decisionPoints = [
@@ -38,29 +39,31 @@ const trustSignals = [
   },
 ];
 
-const guides = [
+const funnelSteps = [
   {
-    category: "학생용 가이드",
-    slug: "best-macbook-for-students",
-    title: "가볍고 오래 가는 쪽이 중요한 사람",
-    excerpt:
-      "매일 들고 다니며 문서, 브라우저, 수업 중심으로 쓰는 경우 어디까지면 충분한지 정리합니다.",
+    step: "1",
+    title: "4개 질문",
+    body: "1분 안에 끝나는 질문으로 사용 패턴을 먼저 좁힙니다.",
   },
   {
-    category: "개발자 가이드",
-    slug: "best-macbook-for-developers",
-    title: "여러 앱과 브라우저 탭을 동시에 여는 사람",
-    excerpt:
-      "코드 편집, 외부 모니터, 메모리 여유가 중요한 경우 Air와 Pro 사이 기준을 설명합니다.",
+    step: "2",
+    title: "추천 결과",
+    body: "Air와 Pro 사이에서 지금 사기 쉬운 모델을 바로 보여줍니다.",
   },
   {
-    category: "크리에이터 가이드",
-    slug: "macbook-air-vs-pro",
-    title: "화면과 성능 여유가 수익과 연결되는 사람",
-    excerpt:
-      "영상 편집과 디자인 작업에서 어떤 차이가 체감되는지 이해하기 쉽게 정리합니다.",
+    step: "3",
+    title: "실구매 이동",
+    body: "추천 아래에서 현재 연결된 구매 상품까지 바로 이어집니다.",
   },
 ];
+
+const guideHighlights = buyingGuides.filter((guide) =>
+  [
+    "best-macbook-for-students",
+    "best-macbook-for-developers",
+    "macbook-air-vs-pro",
+  ].includes(guide.slug),
+);
 
 const quickChecks = [
   {
@@ -109,6 +112,9 @@ export default function Home() {
           <div className="relative z-10">
             <div className="max-w-4xl">
               <p className="eyebrow">For Korean Buyers</p>
+              <p className="mt-4 text-sm uppercase tracking-[0.22em] text-[var(--muted)]">
+                4 Questions · Under 1 Minute · Current Lineup
+              </p>
               <h1 className="mt-4 max-w-5xl text-balance font-display text-[2.9rem] leading-[0.94] tracking-[-0.05em] text-[var(--ink)] sm:text-6xl lg:text-7xl">
                 나에게 맞는 맥북을
                 <br />
@@ -120,45 +126,78 @@ export default function Home() {
                 모델을 빠르게 정리해드립니다.
               </p>
 
-              <div className="mt-7 flex flex-wrap gap-3">
-                <a className="primary-link" href="#finder">
+              <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <a className="primary-link w-full sm:w-auto" href="#finder">
                   지금 추천 받기
                 </a>
-                <a className="secondary-link" href="#how-it-works">
+                <a className="secondary-link w-full sm:w-auto" href="#how-it-works">
                   어떤 기준으로 고르는지 보기
                 </a>
               </div>
 
-              <div className="mt-8 grid gap-3 sm:grid-cols-3">
+              <div className="mt-6 flex flex-wrap gap-2 text-sm text-[var(--muted)]">
                 {trustSignals.map((signal) => (
-                  <article key={signal.title} className="frost-card min-h-0">
-                    <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
-                      {signal.title}
+                  <span
+                    key={signal.title}
+                    className="rounded-full border border-black/8 bg-white/55 px-3 py-2"
+                  >
+                    {signal.title}
+                  </span>
+                ))}
+              </div>
+
+              <div className="mt-8 grid gap-3 sm:grid-cols-3">
+                {funnelSteps.map((item) => (
+                  <article
+                    key={item.step}
+                    className="rounded-[24px] border border-black/6 bg-[rgba(255,255,255,0.58)] px-4 py-4 backdrop-blur-xl"
+                  >
+                    <p className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">
+                      Step {item.step}
                     </p>
-                    <p className="mt-3 text-sm leading-6 text-[var(--ink)]">
-                      {signal.copy}
+                    <h2 className="mt-3 text-xl font-medium tracking-[-0.04em] text-[var(--ink)]">
+                      {item.title}
+                    </h2>
+                    <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
+                      {item.body}
                     </p>
                   </article>
                 ))}
               </div>
             </div>
 
-            <div className="mt-10 grid gap-8 lg:grid-cols-[0.98fr_1.02fr] lg:items-start">
-              <div id="finder" className="order-1 lg:order-2 lg:pt-2">
+            <div className="mt-8 grid gap-6 lg:grid-cols-[1.04fr_0.96fr] lg:items-start">
+              <div id="finder" className="order-1">
                 <MacbookFinder />
               </div>
 
-              <div className="order-2 lg:order-1">
-                <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
+              <div className="order-2 space-y-4 lg:pl-4">
+                <div className="rounded-[28px] border border-black/6 bg-[rgba(255,255,255,0.6)] p-5 backdrop-blur-xl">
+                  <p className="eyebrow">Buyer Lens</p>
+                  <h2 className="mt-3 text-[2rem] font-medium leading-[1.02] tracking-[-0.05em] text-[var(--ink)]">
+                    복잡한 비교 대신
+                    <br />
+                    지금 필요한 답만 남겼습니다
+                  </h2>
+                  <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
+                    먼저 추천을 받고, 더 확인이 필요할 때만 가이드를 읽으면 됩니다. 홈페이지의 기본 경로는
+                    질문, 추천, 구매 링크 순서입니다.
+                  </p>
+                </div>
+
+                <div className="grid gap-3">
                   {decisionPoints.map((point) => (
-                    <article key={point.title} className="editorial-card">
+                    <article
+                      key={point.title}
+                      className="rounded-[24px] border border-black/6 bg-[rgba(255,255,255,0.5)] p-5 backdrop-blur-xl"
+                    >
                       <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
                         {point.label}
                       </p>
-                      <h2 className="mt-4 text-2xl font-medium tracking-[-0.04em] text-[var(--ink)]">
+                      <h3 className="mt-3 text-xl font-medium tracking-[-0.04em] text-[var(--ink)]">
                         {point.title}
-                      </h2>
-                      <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
+                      </h3>
+                      <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
                         {point.body}
                       </p>
                     </article>
@@ -166,12 +205,9 @@ export default function Home() {
                 </div>
 
                 <div className="mt-4 rounded-[28px] border border-black/6 bg-[rgba(255,255,255,0.62)] p-5 backdrop-blur-xl">
-                  <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
-                    What happens next
-                  </p>
-                  <p className="mt-3 text-base leading-8 text-[var(--ink)]">
-                    질문에 답하면 바로 추천 모델과 실구매 상품이 뜹니다. 더 읽어볼 필요가 있으면 아래 가이드를 보고,
-                    이미 결정이 됐다면 바로 쿠팡 링크로 이동하면 됩니다.
+                  <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">Snapshot</p>
+                  <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
+                    {lineupSnapshotNote}
                   </p>
                 </div>
               </div>
@@ -180,19 +216,19 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="how-it-works" className="px-4 pt-16 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl rounded-[34px] border border-black/6 bg-[rgba(255,255,255,0.56)] px-5 py-10 shadow-[0_28px_80px_rgba(35,38,43,0.08)] backdrop-blur-xl sm:px-8 lg:px-10">
-          <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+      <section id="how-it-works" className="px-4 pt-12 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-6xl rounded-[34px] border border-black/6 bg-[rgba(255,255,255,0.5)] px-5 py-8 shadow-[0_24px_64px_rgba(35,38,43,0.06)] backdrop-blur-xl sm:px-8 lg:px-10">
+          <div className="grid gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-start">
             <div>
               <p className="eyebrow">Who This Helps</p>
-              <h2 className="section-title">
+              <h2 className="max-w-[14ch] font-display text-4xl leading-[0.98] tracking-[-0.06em] text-[var(--ink)] sm:text-5xl">
                 계속 비교만 하던 사람을
                 <br />
                 결정까지 밀어붙이는 구조입니다
               </h2>
-              <p className="section-copy">
-                지금 필요한 건 역사나 뉴스보다도, Air면 충분한지 Pro까지 가야 하는지, 지금 사도 되는지에 대한 짧고
-                명확한 판단입니다.
+              <p className="mt-4 text-base leading-8 text-[var(--muted)]">
+                지금 필요한 건 뉴스보다도 짧고 명확한 판단입니다. 먼저 추천을 보고, 더 확인이 필요할 때만 아래
+                탐색으로 넘어가면 됩니다.
               </p>
               <p className="text-sm leading-7 text-[var(--muted)]">
                 {lineupSnapshotNote}
@@ -215,46 +251,52 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="guides" className="px-4 pt-16 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl">
-          <div className="grid gap-10 lg:grid-cols-[0.84fr_1.16fr]">
-            <div className="space-y-6">
+      <section id="guides" className="px-4 pt-12 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-6xl rounded-[30px] border border-black/6 bg-[rgba(255,255,255,0.38)] px-5 py-8 shadow-[0_20px_56px_rgba(35,38,43,0.05)] backdrop-blur-xl sm:px-8">
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-2xl">
               <p className="eyebrow">Buying Guides</p>
-              <h2 className="section-title">
-                아직 망설여진다면
+              <h2 className="mt-3 max-w-[15ch] font-display text-4xl leading-[0.98] tracking-[-0.06em] text-[var(--ink)]">
+                추천 결과가 애매할 때만
                 <br />
-                구매 직전 가이드만 보면 됩니다
+                가이드를 읽으면 됩니다
               </h2>
-              <p className="section-copy">
-                학생용, 개발용, Air와 Pro 비교처럼 실제로 검색하는 주제만 모았습니다. 길게 읽게 만들지 않고
-                결정을 돕는 방향으로만 정리합니다.
-              </p>
-              <p className="text-sm leading-7 text-[var(--muted)]">
-                {lineupSnapshotNote}
+              <p className="mt-4 text-sm leading-7 text-[var(--muted)] sm:text-base sm:leading-8">
+                구매 가이드는 결정이 더 필요할 때만 쓰는 보조 경로입니다. 먼저 질문에 답하고, 그다음에 아래 비교를
+                확인하는 편이 가장 빠릅니다.
               </p>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-3">
-              {guides.map((item) => (
-                <article key={item.title} className="surface-panel">
-                  <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
-                    {item.category}
-                  </p>
-                  <h3 className="mt-5 text-2xl font-medium tracking-[-0.04em] text-[var(--ink)]">
-                    {item.title}
-                  </h3>
-                  <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
-                    {item.excerpt}
-                  </p>
-                  <Link
-                    href={`/buying-guides/${item.slug}`}
-                    className="mt-6 inline-flex rounded-full border border-black/10 bg-white/75 px-4 py-2 text-sm text-[var(--ink)]"
-                  >
-                    자세히 보기
-                  </Link>
-                </article>
-              ))}
-            </div>
+            <a className="pill-link px-4 py-3 text-sm text-[var(--ink)]" href="#finder">
+              먼저 추천 받기
+            </a>
+          </div>
+
+          <div className="mt-6 grid gap-3">
+            {guideHighlights.map((item) => (
+              <Link
+                key={item.slug}
+                href={`/buying-guides/${item.slug}`}
+                className="rounded-[24px] border border-black/6 bg-[rgba(255,255,255,0.52)] px-4 py-4 transition hover:-translate-y-[1px] hover:border-black/12 sm:px-5"
+              >
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="min-w-0">
+                    <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
+                      {item.category}
+                    </p>
+                    <h3 className="mt-2 text-xl font-medium tracking-[-0.04em] text-[var(--ink)]">
+                      {item.title}
+                    </h3>
+                    <p className="mt-2 max-w-3xl text-sm leading-7 text-[var(--muted)]">
+                      {item.excerpt}
+                    </p>
+                  </div>
+                  <span className="inline-flex rounded-full border border-black/10 bg-white/70 px-4 py-2 text-sm text-[var(--ink)]">
+                    가이드 보기
+                  </span>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>

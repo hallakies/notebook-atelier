@@ -1,36 +1,38 @@
 {
   "project": {
     "site_name": "Notebook Atelier",
-    "primary_domain": "https://notebook-at.vercel.app",
+    "primary_domain": "https://notebook-at.netlify.app",
     "target_market": "KR",
-    "primary_offer": "MacBook and premium notebook buying decision tool",
-    "instagram_handle": "macbook__boy"
+    "primary_offer": "맥북 구매 결정",
+    "instagram_handle": ""
   },
   "brand": {
     "tone": [
-      "premium",
-      "calm",
-      "decisive"
+      "프리미엄",
+      "간결함",
+      "과장 없는 추천"
     ],
-    "visual_direction": "Apple-adjacent restraint, not imitation",
+    "visual_direction": "프리미엄 전자제품 편집숍의 절제된 톤, 애플 모방 금지",
     "must_not_do": [
-      "Apple impersonation",
-      "spam follow/unfollow",
-      "cheap AI-sounding copy"
+      "애플 공식처럼 보이게 쓰지 않기",
+      "AI 티 나는 문장 쓰지 않기",
+      "중고 상품 추천하지 않기"
     ]
   },
   "commerce": {
     "affiliate_network": "Coupang Partners",
     "product_priority_rules": [
-      "Prefer stable listings",
-      "Prefer listings with strong review count",
-      "Prefer clear seller and fulfillment signals"
+      "애플 본체 우선",
+      "중고 제외",
+      "프로필과 화면 크기 불일치 제외",
+      "쿠팡에서 바로 살 수 있는 상품 우선"
     ]
   },
   "ops": {
     "coupang_ready": true,
     "supabase_ready": true,
-    "vercel_ready": true
+    "vercel_ready": false,
+    "netlify_ready": true
   },
   "analytics": {
     "ga4_measurement_id": "",

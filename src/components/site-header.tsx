@@ -30,23 +30,36 @@ export function SiteHeader() {
 
         <nav className="hidden items-center gap-2 text-sm text-[var(--muted)] md:flex">
           {navItems.map((item) => (
-            <Link key={item.href} href={item.href} className="pill-link px-4 py-2">
+            <Link
+              key={item.href}
+              href={item.href}
+              className={item.href === "/#finder" ? "primary-link px-4 py-2 text-sm" : "pill-link px-4 py-2"}
+            >
               {item.label}
             </Link>
           ))}
         </nav>
 
-        <button
-          type="button"
-          className="menu-button md:hidden"
-          aria-expanded={isOpen}
-          aria-label="메뉴 열기"
-          onClick={() => setIsOpen((value) => !value)}
-        >
-          <span />
-          <span />
-          <span />
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          <Link
+            href="/#finder"
+            className="primary-link px-4 py-2 text-sm"
+            onClick={() => setIsOpen(false)}
+          >
+            추천 받기
+          </Link>
+          <button
+            type="button"
+            className="menu-button"
+            aria-expanded={isOpen}
+            aria-label="메뉴 열기"
+            onClick={() => setIsOpen((value) => !value)}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+        </div>
       </div>
 
       {isOpen ? (

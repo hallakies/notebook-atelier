@@ -49,6 +49,24 @@ export function MacbookFinder() {
   const activeQuestion = finderQuestions[currentStep];
   const recommendation = isComplete ? getRecommendation(answers) : null;
   const recommendationProfileKey = recommendation?.primary.id ?? null;
+  const currentStage = !isComplete ? 1 : productState.items.length > 0 ? 3 : 2;
+  const finderStages = [
+    {
+      step: 1,
+      title: "질문 답변",
+      body: "4개의 질문으로 사용 패턴을 정리합니다.",
+    },
+    {
+      step: 2,
+      title: "추천 확인",
+      body: "가장 먼저 살펴볼 모델을 바로 좁힙니다.",
+    },
+    {
+      step: 3,
+      title: "구매 이동",
+      body: "현재 연결된 실구매 상품으로 이어집니다.",
+    },
+  ];
 
   useEffect(() => {
     if (!recommendationProfileKey) {
@@ -233,10 +251,10 @@ export function MacbookFinder() {
               Finder
             </p>
             <h2 className="mt-3 font-display text-4xl tracking-[-0.06em] text-[var(--ink)]">
-              나에게 맞는 맥북 찾기
+              1분 안에 끝나는 구매 진단
             </h2>
             <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-              4개의 질문으로 Air와 Pro 사이를 빠르게 정리해드립니다.
+              답을 고르면 추천 모델과 실구매 링크까지 바로 이어집니다.
             </p>
           </div>
           <div className="rounded-full border border-black/8 bg-white/55 px-4 py-2 text-sm text-[var(--muted)]">
@@ -249,6 +267,36 @@ export function MacbookFinder() {
             className="h-full rounded-full bg-[linear-gradient(90deg,#15181d,#87715b)] transition-[width] duration-500 ease-out"
             style={{ width: `${(answeredCount / totalQuestions) * 100}%` }}
           />
+        </div>
+
+        <div className="mt-6 grid gap-2 sm:grid-cols-3">
+          {finderStages.map((item) => {
+            const isActive = currentStage === item.step;
+            const isReached = currentStage >= item.step;
+
+            return (
+              <div
+                key={item.step}
+                className={`rounded-[22px] border px-4 py-4 transition ${
+                  isActive
+                    ? "border-transparent bg-[var(--ink)] text-white shadow-[0_20px_40px_rgba(24,26,31,0.16)]"
+                    : isReached
+                      ? "border-black/8 bg-white/72 text-[var(--ink)]"
+                      : "border-black/6 bg-white/38 text-[var(--muted)]"
+                }`}
+              >
+                <p className={`text-xs uppercase tracking-[0.2em] ${isActive ? "text-white/72" : ""}`}>
+                  Step {item.step}
+                </p>
+                <p className="mt-2 text-base font-medium tracking-[-0.03em]">
+                  {item.title}
+                </p>
+                <p className={`mt-1 text-sm leading-6 ${isActive ? "text-white/72" : ""}`}>
+                  {item.body}
+                </p>
+              </div>
+            );
+          })}
         </div>
 
         <div className="mt-6 flex flex-wrap gap-2">
@@ -283,6 +331,9 @@ export function MacbookFinder() {
               <h3 className="mt-3 text-3xl font-medium tracking-[-0.05em] text-[var(--ink)]">
                 {activeQuestion.prompt}
               </h3>
+              <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
+                답을 마치면 추천 모델과 바로 이어지는 구매 상품까지 한 화면에서 확인할 수 있습니다.
+              </p>
             </div>
 
             <div className="grid gap-3">
@@ -322,7 +373,7 @@ export function MacbookFinder() {
           <div className="mt-7 space-y-6">
             <div className="rounded-[28px] border border-black/8 bg-[linear-gradient(145deg,rgba(255,255,255,0.82),rgba(243,238,232,0.86))] p-6">
               <p className="text-sm uppercase tracking-[0.22em] text-[var(--muted)]">
-                Your Match
+                Step 2 · Your Match
               </p>
               <h3 className="mt-3 font-display text-5xl tracking-[-0.06em] text-[var(--ink)]">
                 {recommendation.primary.title}
@@ -362,14 +413,10 @@ export function MacbookFinder() {
                 ))}
               </div>
 
-              <div className="mt-6 flex flex-wrap gap-3">
-                <button
-                  type="button"
-                  onClick={handleRefreshProducts}
-                  className="rounded-full border border-black/10 bg-white/80 px-4 py-2 text-sm text-[var(--ink)]"
-                >
-                  상품 다시 불러오기
-                </button>
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <a className="primary-link w-full sm:w-auto" href="#ready-to-buy">
+                  실구매 상품 바로 보기
+                </a>
                 <button
                   type="button"
                   onClick={handleReset}
@@ -378,21 +425,40 @@ export function MacbookFinder() {
                   다시 진단하기
                 </button>
               </div>
+
+              <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
+                추천이 맞다면 바로 아래에서 현재 연결된 구매 상품을 확인하면 됩니다.
+              </p>
             </div>
 
-            <div className="rounded-[28px] border border-black/8 bg-[rgba(255,255,255,0.72)] p-6">
-              <div className="flex items-end justify-between gap-4">
+            <div
+              id="ready-to-buy"
+              className="rounded-[28px] border border-[rgba(159,125,87,0.24)] bg-[linear-gradient(160deg,rgba(255,255,255,0.78),rgba(245,236,225,0.88))] p-6 shadow-[0_24px_48px_rgba(159,125,87,0.08)]"
+            >
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                 <div>
                   <p className="text-sm uppercase tracking-[0.22em] text-[var(--muted)]">
-                    Ready To Buy
+                    Step 3 · Ready To Buy
                   </p>
                   <h4 className="mt-3 text-2xl font-medium tracking-[-0.04em] text-[var(--ink)]">
-                    지금 바로 살 수 있는 상품
+                    추천과 바로 이어지는 실구매 상품
                   </h4>
+                  <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
+                    현재 연결된 판매 링크만 보여드립니다. 가격과 판매처를 확인한 뒤 바로 이동하세요.
+                  </p>
                 </div>
-                <p className="text-sm text-[var(--muted)]">
-                  {productState.items.length} items
-                </p>
+                <div className="flex items-center gap-3">
+                  <p className="text-sm text-[var(--muted)]">
+                    {productState.items.length} items
+                  </p>
+                  <button
+                    type="button"
+                    onClick={handleRefreshProducts}
+                    className="rounded-full border border-black/10 bg-white/80 px-4 py-2 text-sm text-[var(--ink)]"
+                  >
+                    상품 새로고침
+                  </button>
+                </div>
               </div>
 
               {productState.status === "loading" ? (
@@ -431,7 +497,7 @@ export function MacbookFinder() {
                             href={item.deeplink}
                             target="_blank"
                             rel="noopener noreferrer sponsored"
-                            className="mt-4 inline-flex items-center justify-center rounded-full bg-[var(--accent)] px-4 py-3 text-sm text-white shadow-[0_18px_32px_rgba(159,125,87,0.22)]"
+                            className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-[var(--accent)] px-4 py-3 text-sm text-white shadow-[0_18px_32px_rgba(159,125,87,0.22)] sm:w-auto"
                           >
                             쿠팡에서 보기
                           </a>
