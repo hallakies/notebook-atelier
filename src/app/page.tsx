@@ -59,6 +59,7 @@ const funnelSteps = [
 
 const guideHighlights = buyingGuides.filter((guide) =>
   [
+    "best-first-macbook",
     "best-macbook-for-students",
     "best-macbook-for-developers",
     "macbook-air-vs-pro",
@@ -104,6 +105,14 @@ const popularSearchLinks = [
   {
     label: "맥북 지금 사도 될까",
     href: "/buying-guides/should-i-buy-a-macbook-now",
+  },
+  {
+    label: "처음 사는 맥북",
+    href: "/buying-guides/best-first-macbook",
+  },
+  {
+    label: "맥북 에어 13 vs 15",
+    href: "/buying-guides/macbook-air-13-vs-15",
   },
 ];
 
@@ -210,7 +219,7 @@ export default function Home() {
 
               <div className="mt-4 flex flex-wrap items-center gap-2 text-sm text-[var(--muted)]">
                 <span className="mr-1">많이 찾는 질문</span>
-                {popularSearchLinks.slice(0, 4).map((item) => (
+                {popularSearchLinks.slice(0, 6).map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}
