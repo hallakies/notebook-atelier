@@ -64,5 +64,27 @@
     "instagramHook": "맥북, 지금 사도 될까? 답은 의외로 단순합니다",
     "instagramCaptionAngle": "기다릴 이유와 지금 사야 하는 이유를 나눠주는 구매 타이밍 캐러셀",
     "imagePrompt": "Editorial timing concept for premium laptop purchase, elegant laptop beside watch and calendar notes on neutral stone desk, restrained luxury style, warm soft lighting, realistic photography, no logos, negative space for text"
+  },
+  {
+    "slug": "best-first-macbook",
+    "channelPriority": 7,
+    "blogTitle": "처음 사는 맥북, 비싼 모델부터 볼 필요 없는 이유",
+    "blogHook": "맥북을 처음 살 때 가장 흔한 실수는 성능보다 불안을 해결하려고 상위 모델부터 보는 것입니다.",
+    "blogAngle": "입문자가 실제로 어떤 기준으로 Air와 Pro를 먼저 나눠야 하는지 설명하는 글",
+    "blogCta": "처음 사는 기준으로 지금 어떤 모델이 맞는지 바로 확인하려면 여기서 진단해보세요: https://notebook-at.netlify.app/#finder",
+    "instagramHook": "처음 사는 맥북, 비싼 모델이 꼭 정답은 아닙니다",
+    "instagramCaptionAngle": "첫 MacBook을 고를 때 과하게 사지 않도록 기준을 줄여주는 입문자용 캐러셀",
+    "imagePrompt": "Premium editorial first laptop buying concept, elegant minimalist laptop box opening scene on warm neutral table, aspirational but calm atmosphere, realistic photography, no logos, clean negative space for headline"
+  },
+  {
+    "slug": "macbook-air-13-vs-15",
+    "channelPriority": 8,
+    "blogTitle": "맥북 에어 13 vs 15, 화면 크기만의 문제가 아닙니다",
+    "blogHook": "맥북 에어 13인치와 15인치의 차이는 숫자보다도, 얼마나 자주 들고 다니고 얼마나 자주 분할 화면을 쓰는지에서 갈립니다.",
+    "blogAngle": "휴대성과 화면 여유를 놓고 13과 15 중 어떤 Air가 맞는지 빠르게 정리하는 글",
+    "blogCta": "내 사용 패턴 기준으로 13과 15 중 어떤 쪽이 맞는지 바로 확인해보세요: https://notebook-at.netlify.app/#finder",
+    "instagramHook": "맥북 에어 13 vs 15, 작은 차이가 아닙니다",
+    "instagramCaptionAngle": "가방에 넣는 리듬과 분할 화면 습관으로 13과 15를 나누는 캐러셀",
+    "imagePrompt": "Luxury editorial laptop size comparison, two slim modern laptops in different sizes on soft ivory studio set, subtle shadow, premium minimalist composition, realistic photography, no logos, negative space for text"
   }
 ]
