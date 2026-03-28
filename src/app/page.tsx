@@ -62,58 +62,19 @@ const guides = [
   },
 ];
 
-const timeline = [
+const quickChecks = [
   {
-    year: "2008",
-    title: "MacBook Air는 휴대성의 기준을 바꿨습니다",
-    body:
-      "얇고 가벼운 노트북을 원하던 사람들에게 무엇이 중요한지 시장 전체의 언어를 바꿨습니다.",
+    title: "Air가 맞는 사람",
+    body: "문서, 웹, 수업, 회의가 중심이고 가벼운 무게와 배터리를 가장 크게 체감하는 사람",
   },
   {
-    year: "2015",
-    title: "입력 경험과 화면 품질이 더 중요해진 시기",
-    body:
-      "브랜드보다도 실제로 오래 쓰는 키보드와 디스플레이가 구매 만족도를 좌우한다는 점이 분명해졌습니다.",
+    title: "Pro가 맞는 사람",
+    body: "개발, 멀티태스킹, 영상 작업처럼 오래 부하가 걸리고 화면과 성능 여유가 중요한 사람",
   },
   {
-    year: "2020",
-    title: "Apple silicon 이후 선택 기준이 다시 정리됐습니다",
-    body:
-      "배터리와 효율이 크게 좋아지면서, 어떤 사용자가 어떤 모델을 사야 하는지가 더 또렷해졌습니다.",
+    title: "지금 사도 되는 사람",
+    body: "지금 작업이 막혀 있고 필요한 모델이 명확한데, 계속 비교만 하느라 결정을 미루고 있는 사람",
   },
-  {
-    year: "2026",
-    title: "지금은 Air와 Pro의 역할이 더 선명합니다",
-    body:
-      "가벼운 일상 작업과 본격적인 고강도 작업의 차이가 분명해져 추천 로직도 더 명확해졌습니다.",
-  },
-];
-
-const reviewRooms = [
-  {
-    label: "리뷰 정리",
-    title: "긴 리뷰를 다 보지 않아도 됩니다",
-    body:
-      "여러 유튜브 리뷰를 다 보는 대신, 실제 구매 판단에 필요한 포인트만 빠르게 정리합니다.",
-  },
-  {
-    label: "라인업 브리핑",
-    title: "지금 사도 되는지 빠르게 확인합니다",
-    body:
-      "현재 판매 중인 모델과 구매 타이밍 이슈를 놓치지 않고 정리해 드립니다.",
-  },
-  {
-    label: "구매 가이드",
-    title: "결정 전에 필요한 글만 모아둡니다",
-    body:
-      "모델별 차이, Air와 Pro 기준, 용도별 가이드를 추천 결과와 자연스럽게 이어줍니다.",
-  },
-];
-
-const socialPillars = [
-  "읽기 전에 이해되는 짧은 비교 카드 브리핑",
-  "가격과 구매 타이밍을 빠르게 읽는 요약 포맷",
-  "긴 글 내용을 다시 확인하기 쉬운 캐러셀형 정리",
 ];
 
 const jsonLd = {
@@ -152,21 +113,18 @@ export default function Home() {
                 Notebook Atelier
               </p>
               <p className="mt-2 text-sm text-[var(--muted)]">
-                비싼 노트북일수록 더 빠르고 정확하게 고르도록 돕습니다.
+                복잡한 비교를 줄이고, 빨리 사야 할 사람을 빨리 결정시키는 맥북 추천 도구입니다.
               </p>
             </div>
             <nav className="flex flex-wrap gap-2 text-xs tracking-[0.14em] text-[var(--muted)] sm:gap-3 sm:uppercase sm:tracking-[0.18em]">
               <a className="pill-link" href="#finder">
                 추천 받기
               </a>
+              <a className="pill-link" href="#how-it-works">
+                결정 기준
+              </a>
               <a className="pill-link" href="#guides">
-                비교 가이드
-              </a>
-              <a className="pill-link" href="#review-room">
-                리뷰 요약
-              </a>
-              <a className="pill-link" href="#social">
-                짧은 브리핑
+                구매 가이드
               </a>
             </nav>
           </header>
@@ -189,7 +147,7 @@ export default function Home() {
                 <a className="primary-link" href="#finder">
                   지금 추천 받기
                 </a>
-                <a className="secondary-link" href="#guides">
+                <a className="secondary-link" href="#how-it-works">
                   어떤 기준으로 고르는지 보기
                 </a>
               </div>
@@ -229,7 +187,52 @@ export default function Home() {
                     </article>
                   ))}
                 </div>
+
+                <div className="mt-4 rounded-[28px] border border-black/6 bg-[rgba(255,255,255,0.62)] p-5 backdrop-blur-xl">
+                  <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
+                    What happens next
+                  </p>
+                  <p className="mt-3 text-base leading-8 text-[var(--ink)]">
+                    질문에 답하면 바로 추천 모델과 실구매 상품이 뜹니다. 더 읽어볼 필요가 있으면 아래 가이드를 보고,
+                    이미 결정이 됐다면 바로 쿠팡 링크로 이동하면 됩니다.
+                  </p>
+                </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="how-it-works" className="px-4 pt-16 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl rounded-[34px] border border-black/6 bg-[rgba(255,255,255,0.56)] px-5 py-10 shadow-[0_28px_80px_rgba(35,38,43,0.08)] backdrop-blur-xl sm:px-8 lg:px-10">
+          <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+            <div>
+              <p className="eyebrow">Who This Helps</p>
+              <h2 className="section-title">
+                계속 비교만 하던 사람을
+                <br />
+                결정까지 밀어붙이는 구조입니다
+              </h2>
+              <p className="section-copy">
+                지금 필요한 건 역사나 뉴스보다도, Air면 충분한지 Pro까지 가야 하는지, 지금 사도 되는지에 대한 짧고
+                명확한 판단입니다.
+              </p>
+              <p className="text-sm leading-7 text-[var(--muted)]">
+                {lineupSnapshotNote}
+              </p>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
+              {quickChecks.map((item) => (
+                <article key={item.title} className="timeline-card">
+                  <h3 className="text-2xl font-medium tracking-[-0.04em] text-[var(--ink)]">
+                    {item.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
+                    {item.body}
+                  </p>
+                </article>
+              ))}
             </div>
           </div>
         </div>
@@ -241,12 +244,13 @@ export default function Home() {
             <div className="space-y-6">
               <p className="eyebrow">Buying Guides</p>
               <h2 className="section-title">
-                맥북을 고를 때 가장 많이 갈리는 기준부터 정리합니다
+                아직 망설여진다면
+                <br />
+                구매 직전 가이드만 보면 됩니다
               </h2>
               <p className="section-copy">
-                학생용, 개발용, 크리에이터용 기준은 서로 다릅니다. 그래서 추천 결과가
-                끝이 아니라 왜 그 모델이 맞는지 이해할 수 있는 설명까지 함께
-                제공합니다.
+                학생용, 개발용, Air와 Pro 비교처럼 실제로 검색하는 주제만 모았습니다. 길게 읽게 만들지 않고
+                결정을 돕는 방향으로만 정리합니다.
               </p>
               <p className="text-sm leading-7 text-[var(--muted)]">
                 {lineupSnapshotNote}
@@ -273,93 +277,6 @@ export default function Home() {
                   </Link>
                 </article>
               ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="px-4 pt-16 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl rounded-[34px] border border-black/6 bg-[rgba(255,255,255,0.56)] px-5 py-10 shadow-[0_28px_80px_rgba(35,38,43,0.08)] backdrop-blur-xl sm:px-8 lg:px-10">
-          <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-            <div>
-              <p className="eyebrow">Why This Makes Sense</p>
-              <h2 className="section-title">
-                맥북의 흐름을 알면 지금 어떤 모델을 사야 할지 더 쉬워집니다
-              </h2>
-              <p className="section-copy">
-                이 섹션은 단순한 역사 소개가 아니라, 왜 Air와 Pro가 지금처럼 나뉘어
-                보이는지 이해하도록 돕는 배경 설명입니다.
-              </p>
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              {timeline.map((item) => (
-                <article key={item.year} className="timeline-card">
-                  <p className="font-display text-4xl tracking-[-0.06em] text-[var(--ink)]">
-                    {item.year}
-                  </p>
-                  <h3 className="mt-3 text-xl font-medium tracking-[-0.04em] text-[var(--ink)]">
-                    {item.title}
-                  </h3>
-                  <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
-                    {item.body}
-                  </p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="review-room" className="px-4 pt-16 sm:px-6 lg:px-8">
-        <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-3">
-          {reviewRooms.map((room) => (
-            <article key={room.title} className="review-room">
-              <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
-                {room.label}
-              </p>
-              <h2 className="mt-5 text-[2rem] font-medium tracking-[-0.05em] text-[var(--ink)]">
-                {room.title}
-              </h2>
-              <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
-                {room.body}
-              </p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section id="social" className="px-4 pt-16 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl rounded-[34px] border border-[rgba(25,27,31,0.08)] bg-[linear-gradient(145deg,rgba(255,255,255,0.75),rgba(239,233,224,0.84))] px-5 py-10 shadow-[0_32px_90px_rgba(28,31,38,0.1)] sm:px-8 lg:px-10">
-          <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-            <div>
-              <p className="eyebrow">Short Briefings</p>
-              <h2 className="section-title">
-                긴 글로 보고, 짧은 카드로 다시 확인할 수 있게 만듭니다
-              </h2>
-              <p className="section-copy">
-                모델 비교와 구매 타이밍 정보를 다시 확인하기 쉽도록 짧은 카드
-                브리핑과 요약 콘텐츠도 함께 운영합니다. 검색에서 들어온 정보가 다시
-                기억에 남도록 만드는 장치입니다.
-              </p>
-            </div>
-
-            <div className="grid gap-3">
-              {socialPillars.map((pillar) => (
-                <div key={pillar} className="social-chip">
-                  {pillar}
-                </div>
-              ))}
-
-              <div className="surface-panel mt-2">
-                <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
-                  What You Get
-                </p>
-                <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
-                  지금 사도 되는지, 어떤 차이가 체감되는지, 내 작업과 무게감이 맞는지까지
-                  짚고 정확하게 다시 확인할 수 있는 요약 콘텐츠를 제공합니다.
-                </p>
-              </div>
             </div>
           </div>
         </div>

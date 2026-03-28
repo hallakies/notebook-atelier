@@ -368,7 +368,7 @@ export function MacbookFinder() {
                   onClick={handleRefreshProducts}
                   className="rounded-full border border-black/10 bg-white/80 px-4 py-2 text-sm text-[var(--ink)]"
                 >
-                  추천 상품 새로고침
+                  상품 다시 불러오기
                 </button>
                 <button
                   type="button"
@@ -387,7 +387,7 @@ export function MacbookFinder() {
                     Ready To Buy
                   </p>
                   <h4 className="mt-3 text-2xl font-medium tracking-[-0.04em] text-[var(--ink)]">
-                    추천 결과에 맞는 실구매 상품
+                    지금 바로 살 수 있는 상품
                   </h4>
                 </div>
                 <p className="text-sm text-[var(--muted)]">
@@ -433,7 +433,7 @@ export function MacbookFinder() {
                             rel="noopener noreferrer sponsored"
                             className="mt-4 inline-flex items-center justify-center rounded-full bg-[var(--ink)] px-4 py-3 text-sm text-white shadow-[0_20px_40px_rgba(24,26,31,0.16)]"
                           >
-                            상품 보러 가기
+                            쿠팡에서 보기
                           </a>
                         </div>
                       </div>
@@ -450,7 +450,7 @@ export function MacbookFinder() {
                     onClick={handleRefreshProducts}
                     className="mt-4 rounded-full border border-black/10 bg-white/80 px-4 py-2 text-sm text-[var(--ink)]"
                   >
-                    다시 확인하기
+                    상품 다시 불러오기
                   </button>
                 </div>
               ) : null}
@@ -463,7 +463,7 @@ export function MacbookFinder() {
                     onClick={handleRefreshProducts}
                     className="mt-4 rounded-full border border-black/10 bg-white/80 px-4 py-2 text-sm text-[var(--ink)]"
                   >
-                    다시 시도하기
+                    상품 다시 불러오기
                   </button>
                 </div>
               ) : null}
