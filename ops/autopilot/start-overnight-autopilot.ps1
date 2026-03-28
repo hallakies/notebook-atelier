@@ -58,6 +58,21 @@ function Get-TaskAttemptCount {
   return [int]$Task.attempts
 }
 
+function Set-TaskField {
+  param(
+    [object]$Task,
+    [string]$Name,
+    [object]$Value
+  )
+
+  if ($Task.PSObject.Properties.Name -contains $Name) {
+    $Task.$Name = $Value
+    return
+  }
+
+  $Task | Add-Member -NotePropertyName $Name -NotePropertyValue $Value
+}
+
 function Touch-Heartbeat {
   param(
     [string]$Path,
@@ -195,8 +210,8 @@ while ($true) {
     if ($item.id -eq $task.id) {
       $item.status = "in_progress"
       $item.notes = "Started by autopilot on $(Get-Date -Format s)"
-      $item.attempts = (Get-TaskAttemptCount -Task $item) + 1
-      $item.last_started_at = (Get-Date).ToString("s")
+      Set-TaskField -Task $item -Name "attempts" -Value ((Get-TaskAttemptCount -Task $item) + 1)
+      Set-TaskField -Task $item -Name "last_started_at" -Value ((Get-Date).ToString("s"))
     }
   }
   Save-Json -Path $statusPath -Data $statusData
@@ -254,18 +269,19 @@ Founder directives for tonight:
   $logPath = Join-Path $runDir "codex.log"
   Set-Content -Path $promptPath -Encoding UTF8 -Value $prompt
 
-  $args = @(
+  if ($UseSearch) {
+    $args = @("--search")
+  } else {
+    $args = @()
+  }
+
+  $args += @(
     "exec",
     "--dangerously-bypass-approvals-and-sandbox",
     "-C", $repoRoot,
-    "-o", $outputPath
+    "-o", $outputPath,
+    $prompt
   )
-
-  if ($UseSearch) {
-    $args += "--search"
-  }
-
-  $args += $prompt
 
   Write-Host "Starting cycle $cycle for task $($task.id)"
   $previousErrorActionPreference = $ErrorActionPreference
@@ -281,7 +297,7 @@ Founder directives for tonight:
     foreach ($item in $statusAfterRun.tasks) {
       if ($item.id -eq $task.id -and $item.status -eq "in_progress") {
         $item.status = "blocked"
-        $item.retry_after = (Get-Date).AddMinutes(10).ToString("s")
+        Set-TaskField -Task $item -Name "retry_after" -Value ((Get-Date).AddMinutes(10).ToString("s"))
         $item.notes = "Autopilot harness saw codex exit code $codexExitCode on $(Get-Date -Format s). Review $logPath."
       }
     }
