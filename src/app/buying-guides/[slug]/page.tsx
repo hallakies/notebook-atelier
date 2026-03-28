@@ -177,6 +177,20 @@ export default async function BuyingGuideDetailPage(context: RouteContext) {
           </div>
         </section>
       </article>
+
+      <div className="pointer-events-none fixed inset-x-0 bottom-4 z-40 px-4 sm:hidden">
+        <div className="pointer-events-auto mx-auto flex max-w-md items-center gap-3 rounded-full border border-black/8 bg-[rgba(255,255,255,0.92)] p-2 shadow-[0_24px_48px_rgba(24,26,31,0.16)] backdrop-blur-xl">
+          <Link className="primary-link min-w-0 flex-1 justify-center px-4 py-3 text-sm" href="/#finder">
+            4문항 진단하기
+          </Link>
+          <Link
+            className="rounded-full border border-black/8 bg-white px-4 py-3 text-sm text-[var(--ink)]"
+            href="/buying-guides"
+          >
+            다른 글
+          </Link>
+        </div>
+      </div>
     </main>
   );
 }
