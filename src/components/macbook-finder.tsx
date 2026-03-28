@@ -456,6 +456,32 @@ export function MacbookFinder() {
                 ))}
               </div>
 
+              {recommendation.alternative ? (
+                <div className="mt-6 rounded-[24px] border border-black/8 bg-white/62 p-5">
+                  <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
+                    Alternative
+                  </p>
+                  <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                      <h4 className="text-2xl font-medium tracking-[-0.04em] text-[var(--ink)]">
+                        {recommendation.alternative.title}
+                      </h4>
+                      <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
+                        휴대성보다 화면이나 성능 여유를 조금 더 원한다면 이 대안도 함께 볼 만합니다.
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap gap-2 text-sm text-[var(--muted)]">
+                      <span className="rounded-full border border-black/8 bg-white px-3 py-2">
+                        {recommendation.alternative.chip}
+                      </span>
+                      <span className="rounded-full border border-black/8 bg-white px-3 py-2">
+                        {recommendation.alternative.size}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ) : null}
+
               <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <a className="primary-link w-full sm:w-auto" href="#ready-to-buy">
                   실구매 상품 바로 보기
