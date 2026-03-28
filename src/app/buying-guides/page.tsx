@@ -3,7 +3,8 @@ import { buyingGuides } from "@/content/buying-guides";
 
 export const metadata = {
   title: "맥북 구매 가이드 | Notebook Atelier",
-  description: "맥북 추천, Air vs Pro 비교, 학생용과 개발자용 가이드까지 구매 직전 판단에 필요한 글을 모았습니다.",
+  description:
+    "맥북 추천, Air vs Pro 비교, 학생용·개발자용·직장인용 가이드까지 구매 직전 판단에 필요한 글을 모았습니다.",
 };
 
 export default function BuyingGuidesIndexPage() {

@@ -80,6 +80,51 @@ const quickChecks = [
   },
 ];
 
+const popularSearchLinks = [
+  {
+    label: "맥북 추천",
+    href: "/buying-guides/macbook-recommendation",
+  },
+  {
+    label: "맥북 에어 vs 프로",
+    href: "/buying-guides/macbook-air-vs-pro",
+  },
+  {
+    label: "학생 맥북 추천",
+    href: "/buying-guides/best-macbook-for-students",
+  },
+  {
+    label: "개발자 맥북 추천",
+    href: "/buying-guides/best-macbook-for-developers",
+  },
+  {
+    label: "직장인 맥북 추천",
+    href: "/buying-guides/best-macbook-for-office-work",
+  },
+  {
+    label: "맥북 지금 사도 될까",
+    href: "/buying-guides/should-i-buy-a-macbook-now",
+  },
+];
+
+const faqItems = [
+  {
+    question: "맥북 추천은 어떤 기준으로 해야 하나요?",
+    answer:
+      "휴대성, 작업 강도, 화면 크기, 예산을 먼저 정리하는 편이 가장 빠릅니다. 문서와 웹 중심이면 Air, 개발과 영상처럼 오래 부하가 걸리면 Pro가 더 잘 맞습니다.",
+  },
+  {
+    question: "맥북 에어와 프로 중 무엇이 더 좋은가요?",
+    answer:
+      "무조건 Pro가 좋은 것은 아닙니다. 들고 다니는 시간이 많고 기본 작업이 중심이면 Air가 만족도가 높고, 멀티태스킹과 지속 성능이 중요하면 Pro가 더 안정적입니다.",
+  },
+  {
+    question: "지금 맥북을 사도 괜찮을까요?",
+    answer:
+      "현재 작업이 이미 막히고 있고 필요한 모델이 명확하다면 지금 사는 편이 낫습니다. 단지 루머 때문에 기다리는 경우는 결정만 늦어질 수 있습니다.",
+  },
+];
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
@@ -94,12 +139,29 @@ const jsonLd = {
   },
 };
 
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqItems.map((item) => ({
+    "@type": "Question",
+    name: item.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: item.answer,
+    },
+  })),
+};
+
 export default function Home() {
   return (
     <main className="relative overflow-hidden pb-20">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
 
       <section className="px-4 pt-4 sm:px-6 sm:pt-6 lg:px-8 lg:pt-8">
@@ -143,6 +205,19 @@ export default function Home() {
                   >
                     {signal.title}
                   </span>
+                ))}
+              </div>
+
+              <div className="mt-4 flex flex-wrap items-center gap-2 text-sm text-[var(--muted)]">
+                <span className="mr-1">많이 찾는 질문</span>
+                {popularSearchLinks.slice(0, 4).map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="rounded-full border border-black/8 bg-white/52 px-3 py-2"
+                  >
+                    {item.label}
+                  </Link>
                 ))}
               </div>
 
@@ -296,6 +371,48 @@ export default function Home() {
                   </span>
                 </div>
               </Link>
+            ))}
+          </div>
+
+          <div className="mt-6 flex flex-wrap gap-2">
+            {popularSearchLinks.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="rounded-full border border-black/8 bg-white/58 px-4 py-2 text-sm text-[var(--ink)]"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="px-4 pt-12 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-6xl rounded-[30px] border border-black/6 bg-[rgba(255,255,255,0.42)] px-5 py-8 shadow-[0_20px_56px_rgba(35,38,43,0.05)] backdrop-blur-xl sm:px-8">
+          <div className="max-w-3xl">
+            <p className="eyebrow">FAQ</p>
+            <h2 className="mt-3 font-display text-4xl leading-[0.98] tracking-[-0.06em] text-[var(--ink)] sm:text-5xl">
+              구매 직전에 가장 많이 묻는 질문
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-[var(--muted)] sm:text-base sm:leading-8">
+              길게 읽기 전에 바로 답이 필요한 질문만 짧게 정리했습니다.
+            </p>
+          </div>
+
+          <div className="mt-6 grid gap-3">
+            {faqItems.map((item) => (
+              <article
+                key={item.question}
+                className="rounded-[24px] border border-black/6 bg-[rgba(255,255,255,0.62)] px-4 py-5 sm:px-5"
+              >
+                <h3 className="text-lg font-medium tracking-[-0.03em] text-[var(--ink)]">
+                  {item.question}
+                </h3>
+                <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
+                  {item.answer}
+                </p>
+              </article>
             ))}
           </div>
         </div>

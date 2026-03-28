@@ -3,7 +3,7 @@ import { Cormorant_Garamond, Noto_Sans_KR } from "next/font/google";
 import { SiteHeader } from "@/components/site-header";
 import "./globals.css";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://notebook-at.vercel.app";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://notebook-at.netlify.app";
 
 const displayFont = Cormorant_Garamond({
   subsets: ["latin"],
@@ -20,24 +20,26 @@ const bodyFont = Noto_Sans_KR({
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "노트북 아틀리에 | 취향에 맞는 프리미엄 노트북 추천",
+    default: "노트북 아틀리에 | 나에게 맞는 맥북 추천",
     template: "%s | 노트북 아틀리에",
   },
   description:
-    "4개의 질문으로 취향에 맞는 맥북과 프리미엄 노트북을 추천하고, 맥북의 역사·최신 소식·리뷰 큐레이션을 함께 제공하는 에디토리얼 커머스 사이트",
+    "4개의 질문으로 나에게 맞는 맥북을 빠르게 추천하고, 바로 살 수 있는 구매 링크까지 연결하는 구매 결정 도구",
   keywords: [
     "노트북 아틀리에",
     "맥북 추천",
     "맥북 구매 가이드",
-    "프리미엄 노트북 추천",
+    "맥북 에어 vs 프로",
+    "학생 맥북 추천",
+    "개발자 맥북 추천",
+    "직장인 맥북 추천",
     "맥북 비교",
-    "맥북 뉴스",
-    "맥북 리뷰",
+    "맥북 지금 사도 될까",
   ],
   openGraph: {
-    title: "노트북 아틀리에 | 취향에 맞는 프리미엄 노트북 추천",
+    title: "노트북 아틀리에 | 나에게 맞는 맥북 추천",
     description:
-      "4개의 질문으로 취향에 맞는 맥북과 프리미엄 노트북을 추천하는 에디토리얼 커머스 사이트",
+      "4개의 질문으로 나에게 맞는 맥북을 빠르게 추천하고, 바로 구매 링크까지 연결하는 구매 결정 도구",
     siteName: "노트북 아틀리에",
     locale: "ko_KR",
     type: "website",
@@ -45,9 +47,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "노트북 아틀리에 | 취향에 맞는 프리미엄 노트북 추천",
+    title: "노트북 아틀리에 | 나에게 맞는 맥북 추천",
     description:
-      "4개의 질문으로 취향에 맞는 맥북과 프리미엄 노트북을 추천하는 에디토리얼 커머스 사이트",
+      "4개의 질문으로 나에게 맞는 맥북을 빠르게 추천하고, 바로 구매 링크까지 연결하는 구매 결정 도구",
   },
 };
 

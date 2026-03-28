@@ -30,6 +30,16 @@ export async function generateMetadata(context: RouteContext): Promise<Metadata>
   return {
     title: guide.seoTitle,
     description: guide.seoDescription,
+    alternates: {
+      canonical: `/buying-guides/${guide.slug}`,
+    },
+    openGraph: {
+      title: guide.seoTitle,
+      description: guide.seoDescription,
+      type: "article",
+      locale: "ko_KR",
+      url: `/buying-guides/${guide.slug}`,
+    },
   };
 }
 
@@ -45,9 +55,30 @@ export default async function BuyingGuideDetailPage(context: RouteContext) {
   const relatedGuides = buyingGuides
     .filter((item) => item.slug !== slug)
     .slice(0, 3);
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: guide.title,
+    description: guide.seoDescription,
+    inLanguage: "ko-KR",
+    datePublished: guide.publishedAt,
+    author: {
+      "@type": "Organization",
+      name: "Notebook Atelier",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Notebook Atelier",
+    },
+    mainEntityOfPage: `/buying-guides/${guide.slug}`,
+  };
 
   return (
     <main className="px-4 py-8 sm:px-6 lg:px-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
       <article className="mx-auto max-w-4xl">
         <header className="rounded-[32px] border border-black/6 bg-[rgba(255,255,255,0.7)] p-6 shadow-[0_28px_80px_rgba(35,38,43,0.08)] backdrop-blur-xl sm:p-8">
           <p className="eyebrow">{guide.category}</p>
