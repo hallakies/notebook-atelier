@@ -106,30 +106,7 @@ export default function Home() {
           <div className="ambient-orb absolute right-[-8rem] top-[-4rem] h-96 w-96 rounded-full bg-[radial-gradient(circle_at_center,rgba(203,214,232,0.72),rgba(203,214,232,0.08)_60%,transparent_78%)] [animation-delay:1.6s]" />
           <div className="ambient-line absolute left-[12%] top-[20%] h-px w-44 -rotate-12 bg-gradient-to-r from-transparent via-white to-transparent" />
           <div className="ambient-line absolute right-[10%] top-[55%] h-px w-56 rotate-12 bg-gradient-to-r from-transparent via-white/70 to-transparent" />
-
-          <header className="relative z-10 flex flex-col gap-5 border-b border-black/6 pb-6 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <p className="font-display text-[1.55rem] tracking-[0.16em] text-[var(--ink)] sm:text-[1.75rem]">
-                Notebook Atelier
-              </p>
-              <p className="mt-2 text-sm text-[var(--muted)]">
-                복잡한 비교를 줄이고, 빨리 사야 할 사람을 빨리 결정시키는 맥북 추천 도구입니다.
-              </p>
-            </div>
-            <nav className="flex flex-wrap gap-2 text-xs tracking-[0.14em] text-[var(--muted)] sm:gap-3 sm:uppercase sm:tracking-[0.18em]">
-              <a className="pill-link" href="#finder">
-                추천 받기
-              </a>
-              <a className="pill-link" href="#how-it-works">
-                결정 기준
-              </a>
-              <a className="pill-link" href="#guides">
-                구매 가이드
-              </a>
-            </nav>
-          </header>
-
-          <div className="relative z-10 mt-8">
+          <div className="relative z-10">
             <div className="max-w-4xl">
               <p className="eyebrow">For Korean Buyers</p>
               <h1 className="mt-4 max-w-5xl text-balance font-display text-[2.9rem] leading-[0.94] tracking-[-0.05em] text-[var(--ink)] sm:text-6xl lg:text-7xl">

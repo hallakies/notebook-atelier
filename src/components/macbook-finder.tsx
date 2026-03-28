@@ -431,7 +431,7 @@ export function MacbookFinder() {
                             href={item.deeplink}
                             target="_blank"
                             rel="noopener noreferrer sponsored"
-                            className="mt-4 inline-flex items-center justify-center rounded-full bg-[var(--ink)] px-4 py-3 text-sm text-white shadow-[0_20px_40px_rgba(24,26,31,0.16)]"
+                            className="mt-4 inline-flex items-center justify-center rounded-full bg-[var(--accent)] px-4 py-3 text-sm text-white shadow-[0_18px_32px_rgba(159,125,87,0.22)]"
                           >
                             쿠팡에서 보기
                           </a>
@@ -441,6 +441,10 @@ export function MacbookFinder() {
                   ))}
                 </div>
               ) : null}
+
+              <p className="mt-5 text-xs leading-6 text-[var(--muted)]">
+                이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.
+              </p>
 
               {productState.status === "ready" && productState.items.length === 0 ? (
                 <div className="mt-5 rounded-[20px] border border-dashed border-black/10 bg-[rgba(250,248,244,0.9)] px-4 py-5 text-sm leading-7 text-[var(--muted)]">

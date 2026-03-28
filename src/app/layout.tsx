@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Noto_Sans_KR } from "next/font/google";
+import { SiteHeader } from "@/components/site-header";
 import "./globals.css";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://notebook-at.vercel.app";
@@ -58,6 +59,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={`${displayFont.variable} ${bodyFont.variable}`}>
+        <SiteHeader />
         {children}
       </body>
     </html>
