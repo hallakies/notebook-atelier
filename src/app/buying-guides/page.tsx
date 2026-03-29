@@ -10,9 +10,7 @@ const starterGuideSlugs = [
 const comparisonGuideSlugs = ["macbook-air-vs-pro", "macbook-air-13-vs-15"];
 
 const starterGuides = buyingGuides.filter((guide) => starterGuideSlugs.includes(guide.slug));
-
 const comparisonGuides = buyingGuides.filter((guide) => comparisonGuideSlugs.includes(guide.slug));
-
 const useCaseGuides = buyingGuides.filter(
   (guide) => !starterGuideSlugs.includes(guide.slug) && !comparisonGuideSlugs.includes(guide.slug),
 );
@@ -20,7 +18,7 @@ const useCaseGuides = buyingGuides.filter(
 export const metadata = {
   title: "맥북 구매 가이드 | Notebook Atelier",
   description:
-    "맥북 추천, Air vs Pro 비교, 학생용·개발자용·직장인용 가이드까지 구매 직전 판단에 필요한 글을 모았습니다.",
+    "맥북 추천, Air vs Pro 비교, 학생·개발자·직장인 가이드까지 구매 직전 판단에 필요한 글을 모은 페이지",
 };
 
 export default function BuyingGuidesIndexPage() {
@@ -47,11 +45,19 @@ export default function BuyingGuidesIndexPage() {
           <h1 className="mt-4 font-display text-5xl tracking-[-0.06em] text-[var(--ink)]">
             맥북 구매 직전,
             <br />
-            꼭 읽어야 할 가이드
+            딱 필요한 글만 찾기
           </h1>
           <p className="mt-5 text-base leading-8 text-[var(--muted)] sm:text-lg">
-            Air와 Pro 차이, 학생용과 개발자용 기준, 지금 사도 되는지 같은 구매 의도형 주제만 모았습니다.
+            이 페이지는 글을 고르는 페이지입니다. 처음 사는 사람, 비교가 필요한 사람,
+            상황별 추천이 필요한 사람으로 나눠서 한 글씩 바로 들어갈 수 있게 정리합니다.
           </p>
+          <div className="mt-6 rounded-[24px] border border-black/8 bg-[rgba(255,255,255,0.72)] p-4 text-sm leading-7 text-[var(--muted)] sm:p-5">
+            <p className="font-medium text-[var(--ink)]">이 페이지의 역할</p>
+            <p className="mt-2">
+              원하는 주제의 글을 고르는 페이지입니다. 바로 추천이 필요하면 홈 설문으로,
+              비교 글이 필요하면 아래 목록에서 한 글만 골라 들어가면 됩니다.
+            </p>
+          </div>
           <div className="mt-6">
             <Link className="primary-link" href="/#finder">
               먼저 진단하고 추천 받기
@@ -68,10 +74,10 @@ export default function BuyingGuidesIndexPage() {
             <article className="surface-panel">
               <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">처음 사는 경우</p>
               <h3 className="mt-4 text-2xl font-medium tracking-[-0.04em] text-[var(--ink)]">
-                입문자용 가이드부터
+                입문 가이드부터
               </h3>
               <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
-                아직 Air와 Pro도 헷갈린다면 첫 맥북 기준부터 보는 편이 가장 빠릅니다.
+                아직 Air와 Pro도 헷갈린다면 첫 맥북 가이드부터 보는 편이 가장 빠릅니다.
               </p>
               <Link
                 href="/buying-guides/best-first-macbook"
@@ -81,12 +87,12 @@ export default function BuyingGuidesIndexPage() {
               </Link>
             </article>
             <article className="surface-panel">
-              <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">두 모델로 좁혀진 경우</p>
+              <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">두 모델이 헷갈리는 경우</p>
               <h3 className="mt-4 text-2xl font-medium tracking-[-0.04em] text-[var(--ink)]">
-                비교 가이드로
+                비교 글부터
               </h3>
               <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
-                에어와 프로, 13과 15처럼 선택지가 둘로 줄었다면 비교 글부터 보면 됩니다.
+                에어와 프로, 13과 15처럼 선택지가 이미 줄었다면 비교 글부터 보면 됩니다.
               </p>
               <Link
                 href="/buying-guides/macbook-air-vs-pro"
@@ -98,10 +104,10 @@ export default function BuyingGuidesIndexPage() {
             <article className="surface-panel">
               <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">바로 결론이 필요한 경우</p>
               <h3 className="mt-4 text-2xl font-medium tracking-[-0.04em] text-[var(--ink)]">
-                4문항 진단으로
+                4문항 진단부터
               </h3>
               <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
-                읽는 시간 없이 바로 추천 모델을 보고 싶다면 설문부터 시작하는 편이 가장 빠릅니다.
+                글보다 바로 추천 결과와 상품이 필요하다면 홈 설문이 가장 빠릅니다.
               </p>
               <Link
                 href="/#finder"
@@ -116,7 +122,7 @@ export default function BuyingGuidesIndexPage() {
         <section className="mt-10 rounded-[30px] border border-black/6 bg-[rgba(255,255,255,0.54)] p-6 backdrop-blur-xl">
           <p className="eyebrow">Starter Guides</p>
           <h2 className="mt-4 text-3xl font-medium tracking-[-0.05em] text-[var(--ink)]">
-            처음 들어온 사람에게 먼저 필요한 가이드
+            처음 보는 사람에게 먼저 필요한 글
           </h2>
           <div className="mt-6 grid gap-4 md:grid-cols-3">
             {starterGuides.map((guide) => (
@@ -127,9 +133,7 @@ export default function BuyingGuidesIndexPage() {
                 <h3 className="mt-4 text-2xl font-medium tracking-[-0.04em] text-[var(--ink)]">
                   {guide.title}
                 </h3>
-                <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
-                  {guide.excerpt}
-                </p>
+                <p className="mt-4 text-sm leading-7 text-[var(--muted)]">{guide.excerpt}</p>
                 <Link
                   href={`/buying-guides/${guide.slug}`}
                   className="mt-6 inline-flex rounded-full border border-black/10 bg-white/75 px-4 py-2 text-sm text-[var(--ink)]"
@@ -155,9 +159,7 @@ export default function BuyingGuidesIndexPage() {
                 <h3 className="mt-4 text-2xl font-medium tracking-[-0.04em] text-[var(--ink)]">
                   {guide.title}
                 </h3>
-                <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
-                  {guide.excerpt}
-                </p>
+                <p className="mt-4 text-sm leading-7 text-[var(--muted)]">{guide.excerpt}</p>
                 <Link
                   href={`/buying-guides/${guide.slug}`}
                   className="mt-6 inline-flex rounded-full border border-black/10 bg-white/75 px-4 py-2 text-sm text-[var(--ink)]"
@@ -183,9 +185,7 @@ export default function BuyingGuidesIndexPage() {
                 <h3 className="mt-4 text-xl font-medium tracking-[-0.04em] text-[var(--ink)]">
                   {guide.title}
                 </h3>
-                <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
-                  {guide.excerpt}
-                </p>
+                <p className="mt-4 text-sm leading-7 text-[var(--muted)]">{guide.excerpt}</p>
                 <Link
                   href={`/buying-guides/${guide.slug}`}
                   className="mt-6 inline-flex rounded-full border border-black/10 bg-white/75 px-4 py-2 text-sm text-[var(--ink)]"

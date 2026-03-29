@@ -3,7 +3,7 @@ import Link from "next/link";
 const quickChecks = [
   {
     title: "Air가 맞는 사람",
-    body: "문서, 웹, 수업, 회의가 중심이고 가벼운 무게와 배터리를 가장 크게 체감하는 사람",
+    body: "문서, 브라우저, 회의 중심이고 가벼운 무게와 긴 배터리를 먼저 체감하는 사람",
   },
   {
     title: "Pro가 맞는 사람",
@@ -11,32 +11,32 @@ const quickChecks = [
   },
   {
     title: "지금 사도 되는 사람",
-    body: "지금 작업이 막혀 있고 필요한 모델이 명확한데, 계속 비교만 하느라 결정을 미루고 있는 사람",
+    body: "지금 당장 작업이 불편하고 필요한 모델 방향이 이미 보이는데 비교만 계속하고 있는 사람",
   },
 ];
 
 const faqItems = [
   {
-    question: "맥북 추천은 어떤 기준으로 해야 하나요?",
+    question: "맥북 추천은 어떤 기준으로 봐야 하나요?",
     answer:
-      "휴대성, 작업 강도, 화면 크기, 예산을 먼저 정리하는 편이 가장 빠릅니다. 문서와 웹 중심이면 Air, 개발과 영상처럼 오래 부하가 걸리면 Pro가 더 잘 맞습니다.",
+      "이동 빈도, 작업 강도, 화면 크기, 예산을 먼저 정리하는 편이 가장 빠릅니다. 문서와 회의 중심이면 Air, 개발과 영상처럼 오래 부하가 걸리면 Pro가 맞는 경우가 많습니다.",
   },
   {
-    question: "맥북 에어와 프로 중 무엇이 더 좋은가요?",
+    question: "맥북 에어와 프로 중 무엇이 더 좋나요?",
     answer:
-      "무조건 Pro가 좋은 것은 아닙니다. 들고 다니는 시간이 많고 기본 작업이 중심이면 Air가 만족도가 높고, 멀티태스킹과 지속 성능이 중요하면 Pro가 더 안정적입니다.",
+      "무조건 Pro가 더 좋은 것은 아닙니다. 많이 들고 다니고 기본 작업이 중심이면 Air 만족도가 높고, 멀티태스킹과 지속 성능이 중요하면 Pro가 더 안정적입니다.",
   },
   {
     question: "지금 맥북을 사도 괜찮을까요?",
     answer:
-      "현재 작업이 이미 막히고 있고 필요한 모델이 명확하다면 지금 사는 편이 낫습니다. 단지 루머 때문에 기다리는 경우는 결정만 늦어질 수 있습니다.",
+      "지금 작업이 이미 불편하고 필요한 모델 방향이 분명하다면 지금 사는 편이 낫습니다. 단순히 루머만 기다리면 결정만 늦어질 가능성이 큽니다.",
   },
 ];
 
 export const metadata = {
-  title: "추천 기준 | 노트북 아틀리에",
+  title: "추천 기준 보기 | Notebook Atelier",
   description:
-    "노트북 아틀리에가 맥북을 추천할 때 어떤 기준을 보는지, Air와 Pro를 어떻게 나누는지 정리한 안내 페이지",
+    "Notebook Atelier가 맥북을 어떤 기준으로 추천하는지 설명하는 안내 페이지",
 };
 
 export default function HowToChoosePage() {
@@ -51,9 +51,16 @@ export default function HowToChoosePage() {
             무엇을 먼저 보는가
           </h1>
           <p className="mt-5 max-w-3xl text-base leading-8 text-[var(--muted)] sm:text-lg">
-            노트북 아틀리에는 복잡한 스펙 비교보다 사용 패턴을 먼저 봅니다. 휴대성, 작업 강도, 화면 크기,
-            예산을 기준으로 답을 빠르게 줄이는 방식입니다.
+            이 페이지는 추천 기준을 설명합니다. 이동, 작업 강도, 화면 크기, 예산을
+            기준으로 선택지를 줄여서 빠르게 판단하는 방식입니다.
           </p>
+          <div className="mt-6 rounded-[24px] border border-black/8 bg-[rgba(255,255,255,0.74)] p-4 text-sm leading-7 text-[var(--muted)] sm:p-5">
+            <p className="font-medium text-[var(--ink)]">이 페이지의 역할</p>
+            <p className="mt-2">
+              설문이 어떤 기준으로 추천하는지 설명하는 페이지입니다. 모델 추천이
+              필요하면 홈에서 바로 진단하면 됩니다.
+            </p>
+          </div>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
             <Link className="primary-link w-full justify-center sm:w-auto" href="/#finder">
               4문항 진단 시작하기
@@ -67,7 +74,7 @@ export default function HowToChoosePage() {
         <section className="mt-10 rounded-[30px] border border-black/6 bg-[rgba(255,255,255,0.54)] p-6 backdrop-blur-xl">
           <p className="eyebrow">Three Lenses</p>
           <h2 className="mt-4 text-3xl font-medium tracking-[-0.05em] text-[var(--ink)]">
-            먼저 보는 건 이 세 가지입니다
+            먼저 보는 기준은 세 가지입니다
           </h2>
           <div className="mt-6 grid gap-4 md:grid-cols-3">
             {quickChecks.map((item) => (
@@ -75,9 +82,7 @@ export default function HowToChoosePage() {
                 <h3 className="text-2xl font-medium tracking-[-0.04em] text-[var(--ink)]">
                   {item.title}
                 </h3>
-                <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
-                  {item.body}
-                </p>
+                <p className="mt-4 text-sm leading-7 text-[var(--muted)]">{item.body}</p>
               </article>
             ))}
           </div>
@@ -95,7 +100,7 @@ export default function HowToChoosePage() {
                 사용 패턴 정리
               </h3>
               <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
-                얼마나 자주 들고 다니는지, 어떤 작업을 하는지, 화면과 예산을 먼저 나눕니다.
+                얼마나 자주 들고 다니는지, 어떤 작업을 하는지, 화면과 예산을 묻습니다.
               </p>
             </article>
             <article className="surface-panel">
@@ -104,16 +109,16 @@ export default function HowToChoosePage() {
                 Air와 Pro 정리
               </h3>
               <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
-                대부분의 고민은 여기서 줄어듭니다. 그 다음에는 크기와 예산 차이만 남습니다.
+                대부분의 고민은 여기서 먼저 줄어듭니다. 그 다음은 크기와 예산 차이입니다.
               </p>
             </article>
             <article className="surface-panel">
               <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">Step 3</p>
               <h3 className="mt-4 text-2xl font-medium tracking-[-0.04em] text-[var(--ink)]">
-                실구매 이동
+                바로 구매 이동
               </h3>
               <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
-                추천이 끝나면 바로 살 수 있는 상품까지 연결해 결정만 남기게 만듭니다.
+                추천이 끝나면 바로 살 수 있는 상품까지 연결해서 결정을 미루지 않게 만듭니다.
               </p>
             </article>
           </div>
@@ -122,7 +127,7 @@ export default function HowToChoosePage() {
         <section className="mt-10 rounded-[30px] border border-black/6 bg-[rgba(255,255,255,0.42)] p-6 backdrop-blur-xl">
           <p className="eyebrow">FAQ</p>
           <h2 className="mt-4 text-3xl font-medium tracking-[-0.05em] text-[var(--ink)]">
-            가장 많이 묻는 질문
+            자주 묻는 질문
           </h2>
           <div className="mt-6 grid gap-3">
             {faqItems.map((item) => (
@@ -133,9 +138,7 @@ export default function HowToChoosePage() {
                 <h3 className="text-lg font-medium tracking-[-0.03em] text-[var(--ink)]">
                   {item.question}
                 </h3>
-                <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
-                  {item.answer}
-                </p>
+                <p className="mt-3 text-sm leading-7 text-[var(--muted)]">{item.answer}</p>
               </article>
             ))}
           </div>

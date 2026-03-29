@@ -10,11 +10,11 @@ const navItems = [
   },
   {
     href: "/how-to-choose",
-    label: "추천 기준",
+    label: "추천 기준 보기",
   },
   {
     href: "/buying-guides",
-    label: "구매 가이드",
+    label: "가이드 글 찾기",
   },
 ];
 
@@ -37,7 +37,9 @@ export function SiteHeader() {
             <Link
               key={item.href}
               href={item.href}
-              className={item.href === "/#finder" ? "primary-link px-4 py-2 text-sm" : "pill-link px-4 py-2"}
+              className={
+                item.href === "/#finder" ? "primary-link px-4 py-2 text-sm" : "pill-link px-4 py-2"
+              }
             >
               {item.label}
             </Link>

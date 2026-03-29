@@ -85,7 +85,10 @@ export default async function BuyingGuideDetailPage(context: RouteContext) {
               홈
             </Link>
             <span>/</span>
-            <Link href="/buying-guides" className="rounded-full border border-black/8 bg-white/72 px-3 py-2">
+            <Link
+              href="/buying-guides"
+              className="rounded-full border border-black/8 bg-white/72 px-3 py-2"
+            >
               구매 가이드
             </Link>
             <span>/</span>
@@ -100,6 +103,10 @@ export default async function BuyingGuideDetailPage(context: RouteContext) {
           <p className="mt-5 text-base leading-8 text-[var(--muted)] sm:text-lg">
             {guide.heroIntro}
           </p>
+          <div className="mt-6 rounded-[24px] border border-black/8 bg-[rgba(255,255,255,0.74)] p-4 text-sm leading-7 text-[var(--muted)] sm:p-5">
+            <p className="font-medium text-[var(--ink)]">이 글에서 바로 얻는 것</p>
+            <p className="mt-2">{guide.excerpt}</p>
+          </div>
           <div className="mt-5 flex flex-wrap gap-2 text-sm text-[var(--muted)]">
             <span className="rounded-full border border-black/8 bg-white/72 px-3 py-2">
               발행일 {guide.publishedAt}
@@ -144,7 +151,7 @@ export default async function BuyingGuideDetailPage(context: RouteContext) {
         <section className="mt-10 rounded-[28px] border border-black/6 bg-[rgba(255,255,255,0.68)] p-6 backdrop-blur-xl">
           <p className="eyebrow">Recommended Models</p>
           <h2 className="mt-4 text-3xl font-medium tracking-[-0.05em] text-[var(--ink)]">
-            이 가이드와 함께 보기 좋은 모델
+            이 글과 함께 보기 좋은 모델
           </h2>
           <div className="mt-6 grid gap-4 md:grid-cols-2">
             {recommendedModels.map((model) => (
