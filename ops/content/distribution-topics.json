@@ -152,5 +152,38 @@
     "instagramHook": "코딩 공부용 맥북, 처음부터 최고 사양은 아닙니다",
     "instagramCaptionAngle": "개발 입문, 에디터, 브라우저, 강의 영상 기준으로 공부용 맥북을 고르는 방법을 정리하는 캐러셀",
     "imagePrompt": "Premium editorial coding study workspace, elegant laptop with notebook and coffee on warm neutral desk, subtle ambient monitor glow, minimalist luxury atmosphere, realistic photography, no logos"
+  },
+  {
+    "slug": "how-much-ram-do-you-need-for-a-macbook",
+    "channelPriority": 15,
+    "blogTitle": "맥북 RAM 용량, 어디까지 봐야 후회가 적을까",
+    "blogHook": "맥북을 고를 때 칩 이름보다 더 오래 후회하게 만드는 건 메모리 선택입니다. 사용 패턴별 기준부터 정리해야 합니다.",
+    "blogAngle": "문서 작업, 개발, 영상 작업 기준으로 맥북 RAM을 어떻게 판단해야 하는지 정리하는 글",
+    "blogCta": "내 작업 기준으로 어떤 맥북이 맞는지 바로 확인하려면 여기서 설문을 시작해보세요: https://notebook-at.netlify.app/#finder",
+    "instagramHook": "맥북은 RAM 선택이 더 오래 남습니다",
+    "instagramCaptionAngle": "칩 이름보다 메모리 선택에서 후회가 갈리는 이유를 사용 패턴 기준으로 정리하는 캐러셀",
+    "imagePrompt": "Premium editorial hardware detail scene, elegant laptop with minimal memory-chip inspired abstract composition on warm neutral desk, soft studio lighting, luxury tech magazine style, realistic photography, no logos"
+  },
+  {
+    "slug": "best-macbook-for-design-beginners",
+    "channelPriority": 16,
+    "blogTitle": "디자인 입문용 맥북, 포토샵과 피그마 기준으로 고르는 법",
+    "blogHook": "디자인 입문 단계에서는 가장 비싼 모델보다 화면과 안정감의 균형이 더 중요합니다.",
+    "blogAngle": "피그마, 포토샵, 일러스트 입문 기준으로 Air와 Pro를 어떻게 나눌지 정리하는 글",
+    "blogCta": "디자인 공부 기준으로 어떤 맥북이 맞는지 바로 보려면 여기서 설문을 확인해보세요: https://notebook-at.netlify.app/#finder",
+    "instagramHook": "디자인 입문용 맥북, 제일 비싼 모델부터 볼 필요는 없습니다",
+    "instagramCaptionAngle": "피그마, 포토샵, 일러스트레이터 입문 기준으로 어떤 맥북이 적당한지 정리하는 캐러셀",
+    "imagePrompt": "Premium editorial creative desk with elegant laptop, sketchbook, color swatches and minimal design tools on warm neutral surface, soft daylight, realistic photography, no logos"
+  },
+  {
+    "slug": "best-macbook-for-frequent-business-travel",
+    "channelPriority": 17,
+    "blogTitle": "출장이 많은 직장인에게 맞는 맥북은 무엇일까",
+    "blogHook": "미팅과 출장, 이동 중 업무가 많다면 화면 크기보다 무게와 배터리, 가방에서 꺼내 쓰는 리듬이 더 중요해집니다.",
+    "blogAngle": "출장이 잦은 직장인이 이동 업무 기준으로 어떤 맥북을 고르면 좋은지 정리하는 글",
+    "blogCta": "출장과 이동 업무 기준으로 바로 추천받고 싶다면 설문으로 확인해보세요: https://notebook-at.netlify.app/#finder",
+    "instagramHook": "출장이 많을수록 맥북 기준은 단순해집니다",
+    "instagramCaptionAngle": "공항, 회의실, 호텔에서 다시 켤 때의 편안함을 기준으로 출장용 맥북을 고르는 캐러셀",
+    "imagePrompt": "Premium editorial business travel scene, elegant laptop beside passport, notebook and carry-on handle on warm neutral airport lounge setting, soft natural light, realistic photography, no logos"
   }
 ]

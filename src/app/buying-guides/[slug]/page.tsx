@@ -5,6 +5,7 @@ import {
   buyingGuides,
   getBuyingGuideBySlug,
   getBuyingGuideRecommendations,
+  getRelatedBuyingGuides,
 } from "@/content/buying-guides";
 
 type RouteContext = {
@@ -52,9 +53,7 @@ export default async function BuyingGuideDetailPage(context: RouteContext) {
   }
 
   const recommendedModels = getBuyingGuideRecommendations(slug);
-  const relatedGuides = buyingGuides
-    .filter((item) => item.slug !== slug)
-    .slice(0, 3);
+  const relatedGuides = getRelatedBuyingGuides(slug);
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",

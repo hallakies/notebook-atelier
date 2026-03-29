@@ -467,6 +467,102 @@ export const buyingGuides: BuyingGuide[] = [
       },
     ],
   },
+  {
+    slug: "how-much-ram-do-you-need-for-a-macbook",
+    category: "맥북 RAM 가이드",
+    title: "맥북 RAM 용량은 어디까지 봐야 할까",
+    excerpt:
+      "맥북을 고를 때 칩 이름보다 더 오래 후회하게 만드는 건 메모리 선택입니다. 사용 패턴별 기준을 먼저 정리해야 합니다.",
+    seoTitle: "맥북 RAM 용량 추천 | 메모리 얼마나 필요할까",
+    seoDescription:
+      "문서 작업, 개발, 영상 편집 기준으로 맥북 RAM 용량을 어디까지 봐야 하는지 정리한 구매 가이드.",
+    publishedAt: "2026-03-29",
+    heroIntro:
+      "맥북은 메모리를 나중에 따로 늘리기 어렵기 때문에, 처음 살 때 내 작업 리듬에 맞는 용량을 고르는 판단이 중요합니다.",
+    finderPrompt:
+      "내 작업 기준으로 얼마나 여유 있는 모델이 맞는지 설문으로 바로 확인해보세요.",
+    recommendedModelIds: ["air-13-m5", "pro-14-m5", "pro-14-m5-pro"],
+    sections: [
+      {
+        title: "RAM이 중요한 이유",
+        paragraphs: [
+          "문서 작업만 할 때는 차이가 작아 보이지만, 브라우저 탭과 앱이 많아질수록 메모리 여유는 버벅임과 직결됩니다.",
+          "특히 맥북은 오래 쓸수록 사용 습관이 늘어나기 때문에, 처음에 너무 빡빡하게 고르면 만족도가 빠르게 떨어질 수 있습니다.",
+        ],
+      },
+      {
+        title: "사용 패턴으로 고르는 기준",
+        paragraphs: [
+          "문서, 브라우저, 회의, 가벼운 멀티태스킹 중심이라면 Air 계열의 기본 구성이 충분한 경우가 많습니다.",
+          "개발, 영상, 대용량 파일, 장시간 멀티태스킹이 겹친다면 Pro 계열처럼 메모리 여유를 더 확보하는 쪽이 안전합니다.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "best-macbook-for-design-beginners",
+    category: "디자인 입문용 맥북",
+    title: "디자인 입문용 맥북은 무엇이 좋을까",
+    excerpt:
+      "포토샵, 피그마, 일러스트레이터를 배우기 시작하는 단계라면 최고 사양보다 화면과 안정감의 균형이 더 중요합니다.",
+    seoTitle: "디자인 입문용 맥북 추천 | 포토샵 피그마 기준 MacBook 고르기",
+    seoDescription:
+      "포토샵, 피그마, 일러스트레이터 입문 기준으로 어떤 맥북이 적당한지 정리한 디자인 초보자용 가이드.",
+    publishedAt: "2026-03-29",
+    heroIntro:
+      "디자인 입문 단계에서는 무조건 가장 비싼 모델보다, 넉넉한 화면과 부드러운 작업 리듬을 주는 구성이 더 현실적입니다.",
+    finderPrompt:
+      "디자인 툴 입문 기준으로 어떤 맥북이 맞는지 바로 진단해보세요.",
+    recommendedModelIds: ["air-15-m5", "pro-14-m5", "pro-14-m5-pro"],
+    sections: [
+      {
+        title: "입문 단계에서 먼저 볼 기준",
+        paragraphs: [
+          "피그마, 포토샵, 일러스트레이터를 처음 다룰 때는 최고 성능보다 화면 여유와 여러 창을 띄웠을 때의 안정감이 중요합니다.",
+          "특히 강의 영상과 툴을 함께 띄우는 흐름이 많다면, 작은 화면보다는 조금 넉넉한 구성이 더 편합니다.",
+        ],
+      },
+      {
+        title: "언제 Air로 충분하고 언제 Pro가 필요한가",
+        paragraphs: [
+          "가벼운 작업, 브랜딩 초안, 배너, 상세페이지 정도라면 Air 15도 충분히 만족도가 높습니다.",
+          "레이어가 많아지고 툴을 여러 개 함께 쓰기 시작하면 Pro 14 계열이 더 안정적인 선택이 됩니다.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "best-macbook-for-frequent-business-travel",
+    category: "출장용 맥북",
+    title: "출장이 많은 직장인에게 맞는 맥북은 무엇일까",
+    excerpt:
+      "미팅과 출장, 이동 중 업무가 많다면 화면 크기보다 무게와 배터리, 가방에서 꺼내 쓰는 리듬이 더 중요해집니다.",
+    seoTitle: "출장 많은 직장인 맥북 추천 | 이동 업무용 MacBook 고르기",
+    seoDescription:
+      "출장, 이동, 프레젠테이션, 문서 작업이 많은 직장인을 위한 맥북 구매 가이드.",
+    publishedAt: "2026-03-29",
+    heroIntro:
+      "출장이 잦은 직장인에게는 책상 위 성능보다 공항, 회의실, 호텔에서 다시 켤 때의 편안함이 더 큰 만족으로 남습니다.",
+    finderPrompt:
+      "이동 업무와 출장 비중을 기준으로 어떤 맥북이 맞는지 바로 확인해보세요.",
+    recommendedModelIds: ["air-13-m5", "air-15-m5", "pro-14-m5"],
+    sections: [
+      {
+        title: "출장이 많을수록 먼저 체감되는 것",
+        paragraphs: [
+          "공항, 기차, 택시, 회의실을 오가며 쓰는 장비는 성능보다 무게와 배터리, 그리고 가방에서 꺼내는 부담이 먼저 체감됩니다.",
+          "이런 환경에서는 매일 들고 다녀도 싫지 않은 모델이 결국 가장 자주 쓰이게 됩니다.",
+        ],
+      },
+      {
+        title: "출장용으로 고를 때의 기준",
+        paragraphs: [
+          "문서, 메일, 브라우저, 프레젠테이션 중심이라면 Air 13이 가장 기민하고 부담이 적습니다.",
+          "화면 여유가 중요하거나 이동 중에도 멀티태스킹이 많다면 Air 15나 Pro 14가 더 편한 선택이 될 수 있습니다.",
+        ],
+      },
+    ],
+  },
 ];
 
 export function getBuyingGuideBySlug(slug: string) {
@@ -482,4 +578,27 @@ export function getBuyingGuideRecommendations(slug: string) {
   return guide.recommendedModelIds
     .map((modelId) => getMacbookModelById(modelId))
     .filter((model): model is NonNullable<typeof model> => Boolean(model));
+}
+
+export function getRelatedBuyingGuides(slug: string) {
+  const guide = getBuyingGuideBySlug(slug);
+  if (!guide) {
+    return [];
+  }
+
+  const sameCategory = buyingGuides.filter(
+    (item) => item.slug !== slug && item.category === guide.category,
+  );
+
+  const overlappingModels = buyingGuides.filter(
+    (item) =>
+      item.slug !== slug &&
+      item.recommendedModelIds.some((modelId) => guide.recommendedModelIds.includes(modelId)),
+  );
+
+  return [...sameCategory, ...overlappingModels]
+    .filter(
+      (item, index, array) => array.findIndex((candidate) => candidate.slug === item.slug) === index,
+    )
+    .slice(0, 3);
 }
