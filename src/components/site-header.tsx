@@ -9,6 +9,10 @@ const navItems = [
     label: "추천 받기",
   },
   {
+    href: "/how-to-choose",
+    label: "추천 기준",
+  },
+  {
     href: "/buying-guides",
     label: "구매 가이드",
   },
