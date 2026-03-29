@@ -41,13 +41,6 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2 md:hidden">
-          <Link
-            href="/#finder"
-            className="primary-link px-4 py-2 text-sm"
-            onClick={() => setIsOpen(false)}
-          >
-            추천 받기
-          </Link>
           <button
             type="button"
             className="menu-button"
