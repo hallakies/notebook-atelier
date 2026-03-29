@@ -29,6 +29,14 @@ $env:Path = "$nodeDir;" + $env:Path
 & "$nodeDir\node.exe" .\scripts\send-content-briefs.mjs
 ```
 
+Send the next unsent briefs only:
+
+```powershell
+$nodeDir='C:\Users\joel6\Desktop\MACBOOK_BOY\notebook-atelier\.tools\node-v20.19.5-win-x64'
+$env:Path = "$nodeDir;" + $env:Path
+& "$nodeDir\node.exe" .\scripts\send-content-briefs.mjs --next --limit 2
+```
+
 Send all briefs:
 
 ```powershell
@@ -64,6 +72,14 @@ Required variable:
 ```powershell
 $env:SLACK_WEBHOOK_URL = "..."
 ```
+
+## Local state
+
+The sender keeps a local send log here:
+
+- `local/content/distribution-state.json`
+
+This file is local-only and is not committed.
 
 ## Notes
 

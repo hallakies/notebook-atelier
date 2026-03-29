@@ -1,23 +1,20 @@
 import Link from "next/link";
 import { buyingGuides } from "@/content/buying-guides";
 
-const starterGuides = buyingGuides.filter((guide) =>
-  ["best-first-macbook", "macbook-recommendation", "should-i-buy-a-macbook-now"].includes(
-    guide.slug,
-  ),
-);
+const starterGuideSlugs = [
+  "best-first-macbook",
+  "macbook-recommendation",
+  "should-i-buy-a-macbook-now",
+];
 
-const comparisonGuides = buyingGuides.filter((guide) =>
-  ["macbook-air-vs-pro", "macbook-air-13-vs-15"].includes(guide.slug),
-);
+const comparisonGuideSlugs = ["macbook-air-vs-pro", "macbook-air-13-vs-15"];
 
-const personaGuides = buyingGuides.filter((guide) =>
-  [
-    "best-macbook-for-students",
-    "best-macbook-for-developers",
-    "best-macbook-for-office-work",
-    "best-macbook-for-video-editing",
-  ].includes(guide.slug),
+const starterGuides = buyingGuides.filter((guide) => starterGuideSlugs.includes(guide.slug));
+
+const comparisonGuides = buyingGuides.filter((guide) => comparisonGuideSlugs.includes(guide.slug));
+
+const useCaseGuides = buyingGuides.filter(
+  (guide) => !starterGuideSlugs.includes(guide.slug) && !comparisonGuideSlugs.includes(guide.slug),
 );
 
 export const metadata = {
@@ -173,12 +170,12 @@ export default function BuyingGuidesIndexPage() {
         </section>
 
         <section className="mt-8 rounded-[30px] border border-black/6 bg-[rgba(255,255,255,0.38)] p-6 backdrop-blur-xl">
-          <p className="eyebrow">Persona Guides</p>
+          <p className="eyebrow">Use Cases</p>
           <h2 className="mt-4 text-3xl font-medium tracking-[-0.05em] text-[var(--ink)]">
             상황별로 바로 들어가는 구매 가이드
           </h2>
-          <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            {personaGuides.map((guide) => (
+          <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {useCaseGuides.map((guide) => (
               <article key={guide.slug} className="surface-panel">
                 <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
                   {guide.category}

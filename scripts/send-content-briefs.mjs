@@ -28,6 +28,8 @@ function parseArgs(argv) {
     dryRun: false,
     limit: 2,
     slug: "",
+    next: false,
+    resetState: false,
   };
 
   for (let index = 0; index < argv.length; index += 1) {
@@ -52,6 +54,16 @@ function parseArgs(argv) {
     if (arg === "--limit") {
       options.limit = Number(argv[index + 1] ?? "2");
       index += 1;
+      continue;
+    }
+
+    if (arg === "--next") {
+      options.next = true;
+      continue;
+    }
+
+    if (arg === "--reset-state") {
+      options.resetState = true;
     }
   }
 
@@ -61,6 +73,27 @@ function parseArgs(argv) {
 function loadTopics() {
   const topicsPath = path.join(repoRoot, "ops", "content", "distribution-topics.json");
   return JSON.parse(fs.readFileSync(topicsPath, "utf8"));
+}
+
+function ensureStateFile(statePath) {
+  if (fs.existsSync(statePath)) {
+    return;
+  }
+
+  fs.mkdirSync(path.dirname(statePath), { recursive: true });
+  const templatePath = path.join(repoRoot, "ops", "content", "distribution-state.template.json");
+  fs.copyFileSync(templatePath, statePath);
+}
+
+function loadState(statePath) {
+  ensureStateFile(statePath);
+  const raw = fs.readFileSync(statePath, "utf8").replace(/^\uFEFF/, "");
+  return JSON.parse(raw);
+}
+
+function saveState(statePath, state) {
+  state.last_updated = new Date().toISOString();
+  fs.writeFileSync(statePath, `${JSON.stringify(state, null, 2)}\n`, "utf8");
 }
 
 function buildInstagramSlides(topic) {
@@ -190,10 +223,20 @@ async function main() {
 
   const options = parseArgs(process.argv.slice(2));
   const topics = loadTopics().sort((left, right) => left.channelPriority - right.channelPriority);
+  const statePath = path.join(repoRoot, "local", "content", "distribution-state.json");
+  const state = loadState(statePath);
+
+  if (options.resetState) {
+    state.sent_topics = [];
+    saveState(statePath, state);
+  }
 
   let selected = topics;
   if (options.slug) {
     selected = topics.filter((topic) => topic.slug === options.slug);
+  } else if (options.next) {
+    const sent = new Set(state.sent_topics.map((item) => item.slug));
+    selected = topics.filter((topic) => !sent.has(topic.slug)).slice(0, options.limit);
   } else if (!options.all) {
     selected = topics.slice(0, options.limit);
   }
@@ -206,6 +249,22 @@ async function main() {
     // brief spacing prevents Slack rate issues and keeps message order deterministic
     // for low-volume operator briefs
     await sendToSlack(webhookUrl, topic, options.dryRun);
+
+    if (!options.dryRun) {
+      const existing = state.sent_topics.find((item) => item.slug === topic.slug);
+      if (existing) {
+        existing.sent_at = new Date().toISOString();
+      } else {
+        state.sent_topics.push({
+          slug: topic.slug,
+          sent_at: new Date().toISOString(),
+        });
+      }
+    }
+  }
+
+  if (!options.dryRun) {
+    saveState(statePath, state);
   }
 
   console.log(`Sent ${selected.length} content brief(s).`);
