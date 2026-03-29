@@ -120,7 +120,7 @@ export default async function BuyingGuideDetailPage(context: RouteContext) {
           </div>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link className="primary-link" href="/#finder">
-              4문항으로 바로 진단하기
+              바로 진단하고 추천 받기
             </Link>
             <Link className="secondary-link" href="/buying-guides">
               다른 가이드 보기
