@@ -86,5 +86,27 @@
     "instagramHook": "맥북 에어 13 vs 15, 작은 차이가 아닙니다",
     "instagramCaptionAngle": "가방에 넣는 리듬과 분할 화면 습관으로 13과 15를 나누는 캐러셀",
     "imagePrompt": "Luxury editorial laptop size comparison, two slim modern laptops in different sizes on soft ivory studio set, subtle shadow, premium minimalist composition, realistic photography, no logos, negative space for text"
+  },
+  {
+    "slug": "best-macbook-for-document-work",
+    "channelPriority": 9,
+    "blogTitle": "문서 작업용 맥북, 어디까지면 충분할까",
+    "blogHook": "문서 작업용 맥북은 최고 성능보다 무게와 배터리, 화면 여유와 멀티태스킹 안정감이 더 중요합니다.",
+    "blogAngle": "워드, 엑셀, 브라우저, 화상회의 중심의 작업에서 어떤 맥북이 효율적인지 정리하는 글",
+    "blogCta": "문서 작업 패턴 기준으로 바로 추천받고 싶다면 여기서 확인하세요: https://notebook-at.netlify.app/#finder",
+    "instagramHook": "문서 작업용 맥북, Pro부터 볼 필요는 없습니다",
+    "instagramCaptionAngle": "워드, 엑셀, 브라우저, 회의 중심의 사용자를 위해 어디까지면 충분한지 정리하는 캐러셀",
+    "imagePrompt": "Premium editorial productivity desk, elegant laptop beside paper documents and notebook, warm daylight, quiet business atmosphere, realistic photography, no logos, minimal composition with clean text space"
+  },
+  {
+    "slug": "best-macbook-for-portability",
+    "channelPriority": 10,
+    "blogTitle": "가볍게 들고 다닐 맥북, 결국 어디가 기준일까",
+    "blogHook": "가벼운 맥북을 찾는다면 숫자보다도 얼마나 자주 들고 다니는지와 어디서 자주 펼치는지를 먼저 봐야 합니다.",
+    "blogAngle": "휴대성과 배터리를 가장 중요하게 보는 사용자에게 어떤 맥북이 맞는지 정리하는 글",
+    "blogCta": "휴대성 중심으로 어떤 맥북이 맞는지 바로 추천받고 싶다면 여기서 확인하세요: https://notebook-at.netlify.app/#finder",
+    "instagramHook": "가벼운 맥북 추천, 결국은 Air에서 갈립니다",
+    "instagramCaptionAngle": "학교, 카페, 출장처럼 이동이 많은 사람에게 어떤 맥북이 맞는지 정리하는 캐러셀",
+    "imagePrompt": "Premium editorial travel laptop scene, slim laptop sliding into elegant bag on warm neutral bench, soft natural light, realistic photography, no logos, minimalist luxury composition"
   }
 ]
